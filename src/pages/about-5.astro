@@ -208,21 +208,23 @@ const credentials = [
     padding: 0;
   }
 
+  /* Each card's figure and description share rows with the other cards, so the descriptions line up. */
   .credentials__item {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: 14px;
+    align-content: start;
     padding: clamp(24px, 3vw, 36px);
     border-radius: var(--radius-lg);
     background: var(--sage);
   }
 
-  /* Sized so even "200+ hours" stays on one line and the four descriptions line up. */
+  /* Sized so "200+ hours" fits on one line in the four-card row. */
   .credentials__figure {
     font-family: var(--font-serif);
     font-size: clamp(30px, 6px + 2.6vw, 46px);
     line-height: 1;
-    white-space: nowrap;
   }
 
   .credentials__text {

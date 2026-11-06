@@ -5,7 +5,8 @@
  */
 export type TextBlock =
   | { type: 'paragraph'; lines: string[] }
-  | { type: 'heading'; text: string }
+  /** level 3 headings; a "section" heading is followed directly by level 4 subheadings. */
+  | { type: 'heading'; text: string; level: 3 | 4; section: boolean }
   | { type: 'list'; items: string[] };
 
 const BULLET = /^(?:•|💚)\s*/u;
@@ -24,7 +25,7 @@ export function textBlocks(text: string, { headings = true } = {}): TextBlock[] 
       if (open?.type === 'list') open.items.push(item);
       else blocks.push((open = { type: 'list', items: [item] }));
     } else if (headings && line.endsWith(':') && line.length <= 60) {
-      blocks.push({ type: 'heading', text: line });
+      blocks.push({ type: 'heading', text: line, level: 3, section: false });
       open = undefined;
     } else if (open?.type === 'paragraph') {
       open.lines.push(line);
@@ -32,6 +33,16 @@ export function textBlocks(text: string, { headings = true } = {}): TextBlock[] 
       blocks.push((open = { type: 'paragraph', lines: [line] }));
     }
   }
+
+  // A heading followed straight away by another heading starts a section, and the
+  // headings after it are its subheadings: "Initial consultation:" then
+  // "Pre appointment health questionnaire:" ... "You will receive:".
+  let inSection = false;
+  blocks.forEach((block, i) => {
+    if (block.type !== 'heading') return;
+    if (inSection) block.level = 4;
+    else if (blocks[i + 1]?.type === 'heading') block.section = inSection = true;
+  });
 
   return blocks;
 }

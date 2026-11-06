@@ -19,10 +19,16 @@ const blocks = textBlocks(text, { headings });
 
 <div class:list={['rich-text', className]}>
   {
-    blocks.map((block) =>
-      block.type === 'heading' ? (
-        <h3 class="rich-text__heading">{block.text}</h3>
-      ) : block.type === 'list' ? (
+    blocks.map((block) => {
+      if (block.type === 'heading') {
+        const Heading = block.level === 4 ? 'h4' : 'h3';
+        return (
+          <Heading class:list={['rich-text__heading', { 'rich-text__heading--section': block.section }]}>
+            {block.text}
+          </Heading>
+        );
+      }
+      return block.type === 'list' ? (
         <ul class="ticks">
           {block.items.map((item) => (
             <li>{item}</li>
@@ -37,8 +43,8 @@ const blocks = textBlocks(text, { headings });
             </>
           ))}
         </p>
-      ),
-    )
+      );
+    })
   }
 </div>
 
@@ -56,6 +62,12 @@ const blocks = textBlocks(text, { headings });
     font-weight: 400;
     font-size: var(--text-body);
     line-height: 1.4;
+  }
+
+  .rich-text__heading--section {
+    font-family: var(--font-serif);
+    font-size: var(--text-h4);
+    line-height: 1.2;
   }
 
   .rich-text > * + .rich-text__heading {

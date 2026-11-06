@@ -119,8 +119,12 @@ const bookHref = '/service-page/free-phone-consultation-1';
       .filter((el): el is HTMLElement => el !== null);
     const setBehindInert = (inert: boolean) => behind.forEach((el) => (el.inert = inert));
 
+    const bar = menu.querySelector<HTMLElement>('.mobile-menu__bar');
+
     const open = () => {
       menu.hidden = false;
+      // Keep links scrolled into view below the sticky bar (which can grow with large text).
+      if (bar) menu.style.scrollPaddingTop = `${bar.offsetHeight + 8}px`;
       setBehindInert(true);
       toggle.setAttribute('aria-expanded', 'true');
       document.documentElement.classList.add('menu-open');
@@ -137,7 +141,11 @@ const bookHref = '/service-page/free-phone-consultation-1';
     toggle.addEventListener('click', open);
     closeBtn.addEventListener('click', () => close());
     menu.addEventListener('click', (event) => {
-      if ((event.target as HTMLElement).closest('a')) close(false);
+      const link = (event.target as HTMLElement).closest('a');
+      if (!link) return;
+      // Email and new-tab links leave this page open, so focus goes back to the menu button.
+      const staysOnPage = link.target === '_blank' || link.protocol === 'mailto:';
+      close(staysOnPage);
     });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !menu.hidden) close();
@@ -303,6 +311,8 @@ const bookHref = '/service-page/free-phone-consultation-1';
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    /* Focused links scroll into view below the sticky bar, not under it (the script refines this). */
+    scroll-padding-top: calc(var(--header-h) + 8px);
     background: var(--cream);
     color: var(--olive);
   }
