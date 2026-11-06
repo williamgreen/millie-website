@@ -18,7 +18,8 @@
   --lime-bright: #f0ffa8;
   --mist: #f0efe6;
   --olive: #46572a;
-  --olive-soft: #6c7856;
+  /* Softer olive for small labels: still at least 5:1 on every block colour. */
+  --olive-soft: #5a6646;
   --ink: #1c2311;
   --ink-rgb: 28, 35, 17;
   --olive-rgb: 70, 87, 42;
@@ -49,6 +50,12 @@
   --gutter: clamp(20px, 5vw, 64px);
   --container: 1240px;
   --container-narrow: 780px;
+  /*
+   * Distance from the screen edge to the content column, for full-width bars
+   * (header, home hero) that should line up with .container. The 100% is the
+   * width of the element it is used in, which is the full page width for these.
+   */
+  --edge: max(var(--gutter), (100% - var(--container)) / 2);
   --section-y: clamp(72px, 8vw + 24px, 144px);
   --radius-lg: 28px;
   --radius: 20px;
@@ -83,6 +90,8 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   min-height: 100vh;
   background: var(--cream);
@@ -94,6 +103,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
+}
+
+/* Short pages: the footer still reaches the bottom of the screen. */
+main {
+  flex: 1 0 auto;
 }
 
 img,
@@ -127,6 +141,8 @@ h4 {
   line-height: 1.08;
   letter-spacing: -0.005em;
   text-wrap: balance;
+  /* A single long word (e.g. "Transformation") may break rather than overflow on tiny screens. */
+  overflow-wrap: break-word;
 }
 
 h5,

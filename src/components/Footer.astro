@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import LeafMark from './LeafMark.astro';
 import Arrow from './Arrow.astro';
+import EmailText from './EmailText.astro';
 import { nav, site } from '../data/site';
 import anpLogo from '../assets/images/anp-logo.png';
 
@@ -38,7 +39,7 @@ const year = new Date().getFullYear();
       <div class="site-footer__col">
         <p class="eyebrow">Get in touch</p>
         <ul>
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={`mailto:${site.email}`}><EmailText /></a></li>
           <li><a href={`tel:+44${site.phone.slice(1)}`}>{site.phone}</a></li>
           <li><a href={site.instagram.url} target="_blank" rel="noopener">Instagram {site.instagram.handle}</a></li>
           <li><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
@@ -74,7 +75,7 @@ const year = new Date().getFullYear();
 
   .site-footer__top {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr) minmax(0, 1.2fr);
     gap: clamp(40px, 6vw, 96px);
   }
 
@@ -183,7 +184,7 @@ const year = new Date().getFullYear();
     }
   }
 
-  @media (max-width: 479.98px) {
+  @media (max-width: 599.98px) {
     .site-footer__top {
       grid-template-columns: minmax(0, 1fr);
     }

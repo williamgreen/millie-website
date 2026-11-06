@@ -57,7 +57,7 @@ const steps = [
           </p>
         </div>
       </div>
-      <aside class="card card--flat included__steps" aria-labelledby="steps-title">
+      <div class="card card--flat included__steps">
         <h3 class="h4" id="steps-title">How it works</h3>
         <ol class="steps">
           {
@@ -71,13 +71,13 @@ const steps = [
             ))
           }
         </ol>
-      </aside>
+      </div>
     </div>
   </section>
 
   <section class="section section--tight section--lime" aria-labelledby="perfect-title">
     <div class="container--narrow perfect">
-      <p class="eyebrow perfect__eyebrow" id="perfect-title">Perfect for</p>
+      <p class="eyebrow" id="perfect-title">Perfect for</p>
       <p class="perfect__text">Anyone who would like clarity and direction before investing in a full plan</p>
     </div>
   </section>
@@ -144,10 +144,6 @@ const steps = [
   /* Perfect for */
   .perfect {
     text-align: center;
-  }
-
-  .perfect__eyebrow {
-    color: var(--olive);
   }
 
   .perfect__text {

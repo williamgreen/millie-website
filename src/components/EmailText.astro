@@ -1,0 +1,12 @@
+---
+/**
+ * Amelia's email address as text, allowed to wrap only before the "@", so a
+ * narrow column shows "ameliapeacenutrition" / "@gmail.com" rather than
+ * breaking the address at a random letter.
+ */
+import { site } from '../data/site';
+
+const [user, domain] = site.email.split('@');
+---
+
+{user}<wbr />@{domain}

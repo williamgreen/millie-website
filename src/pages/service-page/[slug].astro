@@ -2,6 +2,9 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import BookingCta from '../../components/BookingCta.astro';
+import RichText from '../../components/RichText.astro';
+import EmailText from '../../components/EmailText.astro';
 import Arrow from '../../components/Arrow.astro';
 import { site } from '../../data/site';
 import { services, spokenDuration, type Service } from '../../data/services';
@@ -38,7 +41,7 @@ const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undef
     </Fragment>
   </PageHeader>
 
-  <section class="section section--cream" aria-label="Service details">
+  <section class="section section--cream">
     <div class="container details">
       <div class="details__main">
         {
@@ -46,7 +49,9 @@ const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undef
             <>
               <p class="eyebrow">About this service</p>
               <h2 class="h2">Service Description</h2>
-              <p class="details__description">{service.description}</p>
+              <div class="details__description">
+                <RichText text={service.description} />
+              </div>
             </>
           ) : (
             <>
@@ -66,16 +71,12 @@ const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undef
         <h2 class="h4" id="summary-title">At a glance</h2>
         <dl class="summary">
           <div>
-            <dt>Duration</dt>
+            <dt>Appointment</dt>
             <dd aria-label={spokenDuration(service.duration)}>{service.duration}</dd>
           </div>
           <div>
             <dt>Price</dt>
             <dd>{service.price ?? 'Free'}</dd>
-          </div>
-          <div>
-            <dt>Location</dt>
-            <dd>{site.address.full}</dd>
           </div>
         </dl>
         <a class="btn btn--block" href={service.bookingUrl}>Book Now <Arrow /></a>
@@ -84,11 +85,13 @@ const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undef
         <ul class="details__contact">
           <li>{site.address.full}</li>
           <li><a href={`tel:+44${site.phone.slice(1)}`}>{site.phone}</a></li>
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={`mailto:${site.email}`}><EmailText /></a></li>
         </ul>
       </aside>
     </div>
   </section>
+
+  {service.slug !== 'free-phone-consultation-1' && <BookingCta tone="lime" />}
 </BaseLayout>
 
 <style>
@@ -100,9 +103,7 @@ const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undef
   }
 
   .details__description {
-    max-width: 66ch;
     margin-top: clamp(20px, 2.5vw, 28px);
-    white-space: pre-line;
   }
 
   .details__more {
@@ -110,8 +111,6 @@ const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undef
   }
 
   .details__card {
-    position: sticky;
-    top: 32px;
     padding: clamp(24px, 3vw, 36px);
     border-radius: var(--radius-lg);
     background: var(--sage);
@@ -165,13 +164,17 @@ const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undef
     text-decoration: underline;
   }
 
+  /* Keep the card in view while reading, on screens tall enough to show all of it. */
+  @media (min-width: 900px) and (min-height: 760px) {
+    .details__card {
+      position: sticky;
+      top: 32px;
+    }
+  }
+
   @media (max-width: 899.98px) {
     .details {
       grid-template-columns: minmax(0, 1fr);
-    }
-
-    .details__card {
-      position: static;
     }
   }
 </style>

@@ -34,8 +34,8 @@ const {
       <Image
         src={image}
         alt={imageAlt}
-        widths={[480, 720, 960, 1280]}
-        sizes="(min-width: 900px) 45vw, 100vw"
+        widths={[480, 720, 960, 1280, 1600, 1920]}
+        sizes="(min-width: 1440px) 1020px, (min-width: 900px) 84vw, 100vw"
         class="media-cover"
         style={`object-position: ${imagePosition}`}
       />
@@ -101,6 +101,7 @@ const {
 
     .booking__media {
       aspect-ratio: 4 / 3;
+      max-height: min(85vh, 640px);
     }
   }
 </style>

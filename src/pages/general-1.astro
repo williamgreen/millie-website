@@ -6,8 +6,8 @@ import BookingCta from '../components/BookingCta.astro';
 import Arrow from '../components/Arrow.astro';
 import supperClub from '../assets/images/supper-club.jpg';
 import garden from '../assets/images/amelia-garden.jpg';
-import tomatoes from '../assets/images/service-transformation.jpg';
-import clementines from '../assets/images/service-3-month-foundation.jpg';
+import plates from '../assets/images/service-diet-lifestyle-analysis.jpg';
+import freeCall from '../assets/images/service-free-phone-consultation.jpg';
 
 const packages = [
   {
@@ -88,7 +88,7 @@ const packages = [
               <p class="package__outro">{pkg.outro}</p>
               <div class="btn-row package__actions">
                 <a class="btn" href={pkg.href}>
-                  Book Here <Arrow />
+                  Book Here<span class="visually-hidden">: {pkg.name}</span> <Arrow />
                 </a>
               </div>
             </div>
@@ -101,8 +101,8 @@ const packages = [
       <div class="mini__card">
         <div class="mini__media">
           <Image
-            src={tomatoes}
-            alt="Crates of red tomatoes at a market"
+            src={plates}
+            alt="Plates of colourful food being shared at a table"
             widths={[320, 480, 640]}
             sizes="(min-width: 900px) 220px, 100vw"
             class="media-cover"
@@ -118,7 +118,7 @@ const packages = [
     </div>
   </section>
 
-  <BookingCta tone="sage" image={clementines} imageAlt="Clementines piled up at a market stall" />
+  <BookingCta tone="sage" image={freeCall} imageAlt="Heirloom tomatoes in a market crate" />
 </BaseLayout>
 
 <style>
@@ -138,6 +138,8 @@ const packages = [
 
   .package__media {
     aspect-ratio: 16 / 11;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .package__body {

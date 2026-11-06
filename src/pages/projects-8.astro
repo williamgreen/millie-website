@@ -3,21 +3,79 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import BookingCta from '../components/BookingCta.astro';
+import RichText from '../components/RichText.astro';
+import { plainText } from '../utils/text';
 import slide1 from '../assets/images/menstrual-phase-1.jpg';
 import slide2 from '../assets/images/menstrual-phase-2.jpg';
 import slide3 from '../assets/images/menstrual-phase-3.jpg';
 import slide4 from '../assets/images/menstrual-phase-4.jpg';
 import slide5 from '../assets/images/menstrual-phase-5.jpg';
 import slide6 from '../assets/images/menstrual-phase-6.jpg';
-import plates from '../assets/images/service-diet-lifestyle-analysis.jpg';
+import amelia from '../assets/images/amelia-portrait-black-top.jpg';
+
+// The illustrated slides, with the words written on each one (copied from the images) so
+// they can be read as text and by screen readers.
+const series = [
+  {
+    title: 'The physiology',
+    image: slide2,
+    text: `During menstruation, estrogen and progesterone are at their lowest. Your body is shedding the uterine lining, losing iron and minerals, and using more energy for repair.
+
+This is a time for warmth, softness, and deeply nourishing food — not restriction or rushing.`,
+  },
+  {
+    title: 'Rebuild what’s lost',
+    image: slide3,
+    text: `Focus on replenishing iron, zinc, and magnesium.
+
+Choose slow, grounding meals:
+• Stewed lentils or grass-fed meat with leafy greens
+• Cooked dark vegetables — kale, beetroot, spinach
+• Broths, soups, and slow-cooked grains
+
+Pair iron-rich foods with something high in vitamin C — citrus, parsley, or pomegranate — to enhance absorption.`,
+  },
+  {
+    title: 'Soothe inflammation & support digestion',
+    image: slide4,
+    text: `Menstrual cramps stem from inflammation and tension.
+
+Support your body’s natural process with:
+• Omega-3 fats from salmon, walnuts, or flaxseed
+• Warming herbs like ginger, turmeric, and cinnamon
+• Gentle hydration — warm water with lemon, herbal teas, or mineral-rich broths
+
+Avoid extremes: cold raw salads, caffeine, and excess sugar can amplify discomfort.`,
+  },
+  {
+    title: 'Nourish the nervous system',
+    image: slide5,
+    text: `Low hormones mean lower neurotransmitters — it’s common to feel more sensitive or introspective.
+
+Choose foods that stabilise mood and blood sugar:
+• Avocado, dark chocolate, nuts, seeds
+• Oats or quinoa with a drizzle of tahini
+• Herbal teas that calm the nervous system, like chamomile or nettle
+
+Allow slower mornings, deeper breaths, and unhurried meals.`,
+  },
+  {
+    title: 'Closing reflection',
+    image: slide6,
+    text: `This phase isn’t about pushing through — it’s an invitation to retreat and rebuild.
+
+Eat as though you are restoring something sacred, because you are.
+
+When you honour this rhythm, the rest of your cycle softens in response.`,
+  },
+];
 
 const slides = [
-  { src: slide1, alt: 'Illustration: What to eat during your menstrual phase' },
-  { src: slide2, alt: 'The physiology: during menstruation, oestrogen and progesterone are at their lowest' },
-  { src: slide3, alt: 'Rebuild what’s lost: focus on replenishing iron, zinc and magnesium' },
-  { src: slide4, alt: 'Soothe inflammation and support digestion' },
-  { src: slide5, alt: 'Nourish the nervous system' },
-  { src: slide6, alt: 'Closing reflection: this phase is an invitation to retreat and rebuild' },
+  {
+    src: slide1,
+    alt: 'Illustration of a woman wrapped in a red blanket carrying an armful of beetroot through a kitchen, captioned: What to eat during your menstrual phase.',
+  },
+  ...series.map((slide) => ({ src: slide.image, alt: `${slide.title}. ${plainText(slide.text)}` })),
 ];
 ---
 
@@ -77,13 +135,36 @@ const slides = [
           ))
         }
       </ul>
+
+      <details class="series-text">
+        <summary class="btn btn--outline">
+          Read the text of the series
+          <svg class="series-text__chevron" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+          </svg>
+        </summary>
+        <div class="series-text__body">
+          {
+            series.map((slide) => (
+              <div class="series-text__slide">
+                <h3 class="h4">{slide.title}</h3>
+                <RichText text={slide.text} headings={false} />
+              </div>
+            ))
+          }
+        </div>
+      </details>
     </div>
   </section>
 
-  <BookingCta tone="sage" image={plates} imageAlt="Plates of colourful food being shared at a table" />
+  <BookingCta tone="sage" image={amelia} imageAlt="Amelia Peace in a black top, smiling" imagePosition="50% 25%" />
 </BaseLayout>
 
 <style>
+  .article {
+    max-width: 62ch;
+  }
+
   .article > * + * {
     margin-top: 1.2em;
   }
@@ -109,6 +190,44 @@ const slides = [
     overflow: hidden;
     border-radius: var(--radius-lg);
     background: var(--cream);
+  }
+
+  /* Transcript of the slides */
+  .series-text {
+    margin-top: clamp(32px, 4vw, 48px);
+  }
+
+  .series-text summary {
+    list-style: none;
+  }
+
+  .series-text summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .series-text__chevron {
+    transition: transform 0.3s ease;
+  }
+
+  .series-text[open] .series-text__chevron {
+    transform: rotate(180deg);
+  }
+
+  .series-text__body {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: clamp(16px, 2.5vw, 32px);
+    margin-top: clamp(24px, 3vw, 36px);
+  }
+
+  .series-text__slide {
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    background: var(--cream);
+  }
+
+  .series-text__slide h3 {
+    margin-bottom: 14px;
   }
 
   @media (max-width: 1099.98px) {

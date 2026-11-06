@@ -4,8 +4,9 @@ The Amelia Peace Nutrition website ([ameliapeacenutrition.com](https://www.ameli
 rebuilt from the original Wix site as a fast, fully responsive static site with [Astro](https://astro.build).
 
 Every page, image and piece of copy from the live site has been carried over into a refreshed, more modern
-design (same pastel colours), and the URLs are identical (`/about-5`, `/book-online`, `/service-page/...`), so
-existing links and search results keep working.
+design (same pastel colours); the few presentation changes are listed under "Differences from the Wix site".
+The URLs are identical (`/about-5`, `/book-online`, `/service-page/...`), so existing links and search results
+keep working.
 
 ## Getting started
 
@@ -25,14 +26,17 @@ npm run check     # type-check the project
 public/
   favicon.svg, ...        Icons (made from the leaf logo)
 src/
-  assets/images/          Every image from the Wix site (web-sized originals, metadata stripped)
+  assets/images/          Every image from the Wix site (web-sized originals, metadata stripped). A few are
+                          no longer used by the new design but are kept: plums-tile.jpg, vegetable-tray.png,
+                          icon-*.png and social-*.png
   assets/images/hero/     Home page hero slides (see below)
   assets/instagram/       Drop Instagram post images here (see below)
   components/
     HomeHero.astro        Full-screen home page hero (see below)
     PageHeader.astro      Coloured opening block used by every inner page
     BookingCta.astro      "Free phone consultation" block near the end of most pages
-    Header.astro, Footer.astro, InstagramFeed.astro, Arrow.astro, LeafMark.astro
+    RichText.astro        Formats plain text from src/data (paragraphs, "•" bullet lists, "Heading:" lines)
+    Header.astro, Footer.astro, InstagramFeed.astro, EmailText.astro, Arrow.astro, LeafMark.astro
   data/
     site.ts               Name, email, phone, social links, navigation, MailerLite account
     services.ts           The four bookable services (Book Online + /service-page/* pages)
@@ -70,8 +74,9 @@ Slides are the frames of the original Wix hero animation, in `src/assets/images/
 - `frame-NN-portrait.jpg`: a single photo, shown on portrait screens (phones).
 
 Add, remove or reorder files there and the slideshow follows. Timing is set by `STEP` and `FADE` at the top
-of the component. Visitors who prefer reduced motion see a still photo, and there's a pause button for everyone
-else.
+of the component. Only the first photo loads with the page; each next photo is downloaded while the current one
+is showing and fades in once it's ready, and the slideshow rests while it's scrolled out of view. Visitors who
+prefer reduced motion (or have JavaScript off) see a still photo, and there's a pause button for everyone else.
 
 ## Things to set up
 
@@ -112,12 +117,24 @@ Old Wix-only URLs (`/challenges`, `/single-project`, `/booking-calendar/*`) redi
 
 ## Differences from the Wix site
 
-The content is unchanged; the design has been refreshed, and things that were broken on the original fixed:
+The copy is the same as on the live site apart from the presentation changes below. The design has been
+refreshed, and things that were broken on the original fixed:
 
 - New look across the site, built on the same pastel colours: full-screen home hero, Forum headings with small
   tracked labels, rounded photos and cards, bigger lime buttons, a "Book a Free Call" button in the header and a
-  deep olive footer. Some sections have short headings or summaries drawn from the existing text (for example
-  the credentials on the About page).
+  deep olive footer. Some sections have short headings or summaries drawn from the existing text: the About page
+  credentials, the price and session chips and "How it works" steps on Diet & Lifestyle Analysis, and the
+  "At a glance" box on the service pages.
+- Booking buttons: "Book Here" on 1:1 Services and Diet & Lifestyle Analysis now goes straight to that
+  service's page instead of Book Online, and the free consultation block (Home, About and most other pages) has
+  "Book a Free Call" and "View all services" instead of "Book Here".
+- The package prices on 1:1 Services are shown as large prices instead of a "Cost: £350" / "Cost: £500" line.
+- Service and event descriptions are laid out with headings and tick lists instead of plain text with "•" and
+  "💚" bullets.
+- The text written on the Laurel Molly illustrations (Projects) is also available as text under the gallery
+  ("Read the text of the series") and in the images' descriptions for screen readers.
+- The plum-tile background of the Wix "Free phone consultation" section isn't used any more (the image is kept
+  in `src/assets/images/`).
 - The home hero replaces the 494px-tall animated banner. Its headline, "Nutrition for women", was on the Wix
   site but hidden behind the animation.
 - No horizontal scrolling at any screen size (see above).
@@ -132,3 +149,8 @@ The content is unchanged; the design has been refreshed, and things that were br
 Typos are kept exactly as on the live site so they can be fixed deliberately: "1:1 Serives" (menu and page
 title), "Initial Consulation" (How I Work), "registered with the The Association…" (footer) and
 "Duration: Approximately 5" (Transformation Package). Search the `src/` folder for them.
+
+Worth checking with Amelia: the Wix booking settings give appointment lengths that don't match the text. The
+free phone consultation is booked as 15 minutes but described as "a free 20 minute consultation", and the Diet
+& Lifestyle Analysis is booked as 1 hour but described as a 45-minute call. The service pages show the booking
+length (`duration` in `src/data/services.ts`) as "Appointment".

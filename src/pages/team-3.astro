@@ -4,11 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import BookingCta from '../components/BookingCta.astro';
 import Arrow from '../components/Arrow.astro';
+import EmailText from '../components/EmailText.astro';
 import { site } from '../data/site';
 import step1 from '../assets/images/step-1-free-call.jpg';
 import step2 from '../assets/images/step-2-initial-consultation.jpg';
 import step3 from '../assets/images/amelia-reading-menu.jpg';
-import vegetables from '../assets/images/vegetable-tray.png';
 ---
 
 <BaseLayout title="How I Work">
@@ -27,8 +27,8 @@ import vegetables from '../assets/images/vegetable-tray.png';
             <Image
               src={step1}
               alt="Amelia reading by a café window"
-              widths={[360, 540, 720]}
-              sizes="(min-width: 1024px) 30vw, (min-width: 700px) 45vw, 100vw"
+              widths={[540, 720, 1080, 1440]}
+              sizes="(min-width: 700px) 60vw, 100vw"
               class="media-cover"
             />
           </div>
@@ -49,8 +49,8 @@ import vegetables from '../assets/images/vegetable-tray.png';
             <Image
               src={step2}
               alt="Amelia writing notes on paper"
-              widths={[360, 540, 720]}
-              sizes="(min-width: 1024px) 30vw, (min-width: 700px) 45vw, 100vw"
+              widths={[540, 720, 1080, 1440]}
+              sizes="(min-width: 700px) 60vw, 100vw"
               class="media-cover"
               style="object-position: 50% 30%"
             />
@@ -85,8 +85,8 @@ import vegetables from '../assets/images/vegetable-tray.png';
             <Image
               src={step3}
               alt="Amelia reading a menu at a restaurant table"
-              widths={[360, 540, 720]}
-              sizes="(min-width: 1024px) 30vw, (min-width: 700px) 45vw, 100vw"
+              widths={[540, 720, 1080, 1440]}
+              sizes="(min-width: 700px) 60vw, 100vw"
               class="media-cover"
               style="object-position: 50% 15%"
             />
@@ -127,7 +127,7 @@ import vegetables from '../assets/images/vegetable-tray.png';
       <ul class="contact__cards">
         <li class="contact__card">
           <p class="eyebrow">Email</p>
-          <a class="contact__value" href={`mailto:${site.email}`}>{site.email}</a>
+          <a class="contact__value" href={`mailto:${site.email}`}><EmailText /></a>
         </li>
         <li class="contact__card">
           <p class="eyebrow">Call</p>
@@ -144,36 +144,57 @@ import vegetables from '../assets/images/vegetable-tray.png';
     </div>
   </section>
 
-  <BookingCta tone="lime" image={vegetables} imageAlt="A tray of fresh vegetables" />
+  <BookingCta tone="lime" />
 </BaseLayout>
 
 <style>
   .steps {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: clamp(20px, 2.5vw, 32px);
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
+  /* Each step is a card: photo beside the text from 700px, photo on top on phones. */
   .step {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     overflow: hidden;
     border-radius: var(--radius-lg);
     background: var(--sage);
   }
 
+  /* Alternate the photo side, like the other photo-and-text blocks on the site. */
+  .step:nth-child(even) {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  }
+
+  .step:nth-child(even) .step__media {
+    order: 2;
+  }
+
+  /* The photo fills the height of the text beside it. */
   .step__media {
-    aspect-ratio: 4 / 3;
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+  }
+
+  .step__media :global(img) {
+    position: absolute;
+    inset: 0;
   }
 
   .step__body {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding: clamp(24px, 3vw, 36px);
+    padding: clamp(24px, 4vw, 56px);
+  }
+
+  .step__body > * {
+    max-width: 66ch;
   }
 
   .step__body .eyebrow {
@@ -206,11 +227,16 @@ import vegetables from '../assets/images/vegetable-tray.png';
 
   .contact__cards {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  /* The email address is the longest, so it gets the full row. */
+  .contact__card:first-child {
+    grid-column: 1 / -1;
   }
 
   .contact__card {
@@ -241,33 +267,24 @@ import vegetables from '../assets/images/vegetable-tray.png';
   }
 
   @media (max-width: 1099.98px) {
-    .steps {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .step {
-      display: grid;
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    }
-
-    .step__media {
-      aspect-ratio: auto;
-      min-height: 100%;
-    }
-
     .contact {
       grid-template-columns: minmax(0, 1fr);
     }
   }
 
   @media (max-width: 699.98px) {
-    .step {
-      display: flex;
+    .step,
+    .step:nth-child(even) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .step:nth-child(even) .step__media {
+      order: 0;
     }
 
     .step__media {
-      aspect-ratio: 4 / 3;
       min-height: 0;
+      aspect-ratio: 4 / 3;
     }
 
     .contact__cards {

@@ -1,6 +1,7 @@
 ---
 import LeafMark from './LeafMark.astro';
 import Arrow from './Arrow.astro';
+import EmailText from './EmailText.astro';
 import { nav, site } from '../data/site';
 import { cleanPath } from '../utils/paths';
 
@@ -45,7 +46,7 @@ const bookHref = '/service-page/free-phone-consultation-1';
     </div>
   </div>
 
-  <div class="mobile-menu" id="mobile-menu" hidden>
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Site navigation" hidden>
     <div class="mobile-menu__bar">
       <a class="brand" href="/">
         <LeafMark class="brand__mark" />
@@ -74,7 +75,7 @@ const bookHref = '/service-page/free-phone-consultation-1';
     <div class="mobile-menu__footer">
       <a class="btn btn--block" href={bookHref}>Book a Free Call <Arrow /></a>
       <p class="mobile-menu__contact">
-        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <a href={`mailto:${site.email}`}><EmailText /></a>
         <a href={site.instagram.url} target="_blank" rel="noopener">Instagram {site.instagram.handle}</a>
       </p>
     </div>
@@ -93,6 +94,14 @@ const bookHref = '/service-page/free-phone-consultation-1';
         height: auto !important;
         padding-block: 14px !important;
       }
+      .site-nav ul {
+        flex-wrap: wrap;
+        row-gap: 4px;
+      }
+      .site-header--overlay {
+        position: relative !important;
+        background: var(--ink) !important;
+      }
     </style>
   </noscript>
 </header>
@@ -103,14 +112,23 @@ const bookHref = '/service-page/free-phone-consultation-1';
   const closeBtn = menu?.querySelector<HTMLButtonElement>('.mobile-menu__close');
 
   if (toggle && menu && closeBtn) {
+    // While the full-screen menu is open, everything behind it is inert: keyboard and
+    // screen reader users stay inside the menu instead of landing on hidden content.
+    const behind = ['.skip-link', '.site-header__inner', '#main', '.site-footer']
+      .map((selector) => document.querySelector<HTMLElement>(selector))
+      .filter((el): el is HTMLElement => el !== null);
+    const setBehindInert = (inert: boolean) => behind.forEach((el) => (el.inert = inert));
+
     const open = () => {
       menu.hidden = false;
+      setBehindInert(true);
       toggle.setAttribute('aria-expanded', 'true');
       document.documentElement.classList.add('menu-open');
       menu.querySelector<HTMLAnchorElement>('.mobile-menu__nav a')?.focus();
     };
     const close = (restoreFocus = true) => {
       menu.hidden = true;
+      setBehindInert(false);
       toggle.setAttribute('aria-expanded', 'false');
       document.documentElement.classList.remove('menu-open');
       if (restoreFocus) toggle.focus();
@@ -142,17 +160,18 @@ const bookHref = '/service-page/free-phone-consultation-1';
   .site-header__inner {
     display: flex;
     align-items: center;
-    gap: 32px;
-    height: var(--header-h);
-    padding-inline: clamp(20px, 3vw, 40px);
+    gap: clamp(16px, 4vw, 32px);
+    min-height: var(--header-h);
+    padding-inline: var(--edge);
   }
 
   /* ---------- Brand ---------- */
+  /* The logo may shrink (and wrap) if text is enlarged; the buttons beside it never do. */
   .brand {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    flex-shrink: 0;
+    min-width: 0;
     color: var(--olive);
     text-decoration: none;
   }
@@ -168,7 +187,6 @@ const bookHref = '/service-page/free-phone-consultation-1';
     font-family: var(--font-serif);
     font-size: 21px;
     line-height: 1.2;
-    white-space: nowrap;
   }
 
   /* ---------- Desktop navigation ---------- */
@@ -180,7 +198,10 @@ const bookHref = '/service-page/free-phone-consultation-1';
   .site-nav ul {
     display: flex;
     align-items: center;
-    gap: clamp(16px, 1.6vw, 26px);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    /* Tighter just above 1240px, where the nav first appears, so it fits in any font. */
+    gap: 0 clamp(14px, 3.8vw - 33px, 26px);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -211,6 +232,7 @@ const bookHref = '/service-page/free-phone-consultation-1';
 
   .site-header__actions {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     gap: 12px;
     margin-left: auto;
@@ -218,6 +240,7 @@ const bookHref = '/service-page/free-phone-consultation-1';
 
   .site-header__cta {
     box-shadow: none;
+    white-space: nowrap;
   }
 
   /* ---------- Hamburger ---------- */
@@ -289,16 +312,21 @@ const bookHref = '/service-page/free-phone-consultation-1';
   }
 
   .mobile-menu__bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-height: var(--header-h);
-    padding-inline: clamp(20px, 3vw, 40px);
+    padding-inline: var(--edge);
     border-bottom: 1px solid var(--hairline);
+    background: var(--cream);
   }
 
   .mobile-menu__close {
     display: grid;
+    flex-shrink: 0;
     place-items: center;
     width: 46px;
     height: 46px;
@@ -311,7 +339,7 @@ const bookHref = '/service-page/free-phone-consultation-1';
   }
 
   .mobile-menu__nav {
-    padding: clamp(24px, 6vh, 56px) clamp(20px, 6vw, 56px) 24px;
+    padding: clamp(24px, 6vh, 56px) var(--edge) 24px;
   }
 
   .mobile-menu__nav ul {
@@ -341,7 +369,18 @@ const bookHref = '/service-page/free-phone-consultation-1';
     display: grid;
     gap: 22px;
     margin-top: auto;
-    padding: 24px clamp(20px, 6vw, 56px) clamp(28px, 5vh, 48px);
+    padding: 24px var(--edge) clamp(28px, 5vh, 48px);
+  }
+
+  /* Full-width button on phones only; on tablets it sits under the links at its own size. */
+  @media (min-width: 600px) {
+    .mobile-menu__footer {
+      justify-items: start;
+    }
+
+    .mobile-menu__footer .btn {
+      width: auto;
+    }
   }
 
   .mobile-menu__contact {
@@ -369,7 +408,7 @@ const bookHref = '/service-page/free-phone-consultation-1';
     color: var(--cream);
   }
 
-  .site-header--overlay .brand,
+  .site-header--overlay .site-header__inner .brand,
   .site-header--overlay .site-nav a {
     color: var(--cream);
     text-shadow: 0 1px 14px rgba(var(--ink-rgb), 0.45);
@@ -380,7 +419,7 @@ const bookHref = '/service-page/free-phone-consultation-1';
     color: var(--lime);
   }
 
-  .site-header--overlay :focus-visible {
+  .site-header--overlay .site-header__inner :focus-visible {
     outline-color: var(--lime);
   }
 </style>

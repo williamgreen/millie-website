@@ -85,7 +85,7 @@ const stories = [
   <section class="section section--lime stories" aria-labelledby="stories-title">
     <div class="container">
       <div class="section-head section-head--center">
-        <p class="eyebrow stories__eyebrow">Client stories</p>
+        <p class="eyebrow">Client stories</p>
         <h2 class="h2" id="stories-title">“I’d highly recommend Amelia’s service”</h2>
       </div>
       <div class="stories__grid">
@@ -137,10 +137,6 @@ const stories = [
   }
 
   /* ---------- Client stories ---------- */
-  .stories__eyebrow {
-    color: var(--olive);
-  }
-
   .stories__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -195,6 +191,7 @@ const stories = [
 
     .mission__media {
       aspect-ratio: 4 / 3;
+      max-height: min(85vh, 640px);
     }
 
     .stories__grid {

@@ -1,0 +1,68 @@
+---
+/**
+ * Renders plain text from src/data (service descriptions, event details) in the
+ * site's style: paragraphs, small subheadings for lines ending in ":", and lime
+ * tick lists for "•" / "💚" bullet points. See src/utils/text.ts.
+ */
+import { textBlocks } from '../utils/text';
+
+interface Props {
+  text: string;
+  /** Treat short lines ending in ":" as headings (default) or as ordinary text. */
+  headings?: boolean;
+  class?: string;
+}
+
+const { text, headings = true, class: className } = Astro.props;
+const blocks = textBlocks(text, { headings });
+---
+
+<div class:list={['rich-text', className]}>
+  {
+    blocks.map((block) =>
+      block.type === 'heading' ? (
+        <h3 class="rich-text__heading">{block.text}</h3>
+      ) : block.type === 'list' ? (
+        <ul class="ticks">
+          {block.items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>
+          {block.lines.map((line, i) => (
+            <>
+              {i > 0 && <br />}
+              {line}
+            </>
+          ))}
+        </p>
+      ),
+    )
+  }
+</div>
+
+<style>
+  .rich-text {
+    max-width: 66ch;
+  }
+
+  .rich-text > * + * {
+    margin-top: 1em;
+  }
+
+  .rich-text__heading {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: var(--text-body);
+    line-height: 1.4;
+  }
+
+  .rich-text > * + .rich-text__heading {
+    margin-top: 1.6em;
+  }
+
+  .rich-text__heading + * {
+    margin-top: 0.6em;
+  }
+</style>

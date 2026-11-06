@@ -127,8 +127,9 @@ const hasActions = Astro.slots.has('actions');
       grid-template-columns: minmax(0, 1fr);
     }
 
+    /* Stacked under the text: never taller than most of the screen. */
     .page-header__media {
-      max-height: none;
+      max-height: min(75vh, 640px);
     }
   }
 </style>
