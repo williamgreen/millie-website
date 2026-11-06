@@ -1,5 +1,6 @@
 ---
 import '@fontsource/hanken-grotesk/300.css';
+import '@fontsource/hanken-grotesk/400.css';
 import '@fontsource/hanken-grotesk/600.css';
 import '@fontsource/forum/400.css';
 import '@fontsource/marmelad/400.css';
@@ -25,9 +26,19 @@ interface Props {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   /** Set false for pages that should not be indexed (e.g. 404). */
   index?: boolean;
+  /** Float the header over the first section (used by the full-screen home hero). */
+  overlayHeader?: boolean;
 }
 
-const { title, fullTitle, description, image = defaultShareImage, jsonLd, index = true } = Astro.props;
+const {
+  title,
+  fullTitle,
+  description,
+  image = defaultShareImage,
+  jsonLd,
+  index = true,
+  overlayHeader = false,
+} = Astro.props;
 
 const pageTitle = fullTitle ?? (title ? `${title} | ${site.titleSuffix}` : site.titleSuffix);
 const canonical = new URL(cleanPath(Astro.url.pathname), site.url).href.replace(/\/$/, '');
@@ -88,7 +99,7 @@ const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header />
+    <Header overlay={overlayHeader} />
     <main id="main">
       <slot />
     </main>

@@ -1,0 +1,457 @@
+---
+/**
+ * Full-screen home page hero: a slow crossfading slideshow of the food
+ * photography (the frames of the original Wix hero animation) with the
+ * headline and call to action overlaid.
+ *
+ * Slides live in src/assets/images/hero/:
+ *   frame-NN.jpg           wide collage, used on landscape screens
+ *   frame-NN-portrait.jpg  single photo, used on portrait screens (phones)
+ * Add, remove or reorder files there and the slideshow follows.
+ */
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+type ImageModule = { default: ImageMetadata };
+const wideFiles = import.meta.glob<ImageModule>('../assets/images/hero/frame-*.jpg', { eager: true });
+const portraitFiles = import.meta.glob<ImageModule>('../assets/images/hero/frame-*-portrait.jpg', { eager: true });
+
+const widePaths = Object.keys(wideFiles)
+  .filter((path) => !path.endsWith('-portrait.jpg'))
+  .sort();
+
+const slides = await Promise.all(
+  widePaths.map(async (path) => {
+    const wide = wideFiles[path].default;
+    const portrait = portraitFiles[path.replace(/\.jpg$/, '-portrait.jpg')]?.default ?? wide;
+    const [wideImg, portraitImg] = await Promise.all([
+      getImage({ src: wide, widths: [960, 1440, 1920], format: 'webp', quality: 78 }),
+      getImage({ src: portrait, widths: [480, 720, 960], format: 'webp', quality: 78 }),
+    ]);
+    return { wideImg, portraitImg };
+  }),
+);
+
+// Slideshow timing: each photo is shown for STEP seconds, with a FADE-second crossfade.
+const STEP = 3.2;
+const FADE = 1.1;
+const cycle = slides.length * STEP;
+const pct = (seconds: number) => ((seconds / cycle) * 100).toFixed(3);
+const keyframes =
+  slides.length > 1
+    ? `@keyframes hero-fade{0%{opacity:0}${pct(FADE)}%{opacity:1}${pct(STEP)}%{opacity:1}${pct(STEP + FADE)}%{opacity:0}100%{opacity:0}}`
+    : '';
+---
+
+<section class="hero" aria-labelledby="hero-title" data-hero>
+  <div class="hero__media" aria-hidden="true" style={`--hero-cycle: ${cycle}s`}>
+    {
+      slides.map(({ wideImg, portraitImg }, i) => (
+        <picture class="hero__slide" style={`animation-delay: ${(i * STEP - FADE).toFixed(2)}s`}>
+          <source media="(max-aspect-ratio: 1/1)" srcset={portraitImg.srcSet.attribute} sizes="150vw" />
+          <img
+            src={wideImg.src}
+            srcset={wideImg.srcSet.attribute}
+            sizes="100vw"
+            alt=""
+            width="1920"
+            height="1080"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : 'low'}
+            decoding="async"
+          />
+        </picture>
+      ))
+    }
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__content">
+    <p class="hero__eyebrow">Registered Naturopathic Nutritional Therapist</p>
+    <h1 class="hero__title" id="hero-title">Nutrition for women</h1>
+    <p class="hero__lead">Heal yourself naturally, starting with what’s on your plate.</p>
+    <div class="hero__actions">
+      <a class="hero__cta" href="/service-page/free-phone-consultation-1">
+        Book a Free Call
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+      <a class="hero__secondary" href="/about-5">Discover More</a>
+    </div>
+    <p class="hero__note">Free 20 minute phone consultation · Online or 1:1 in Bristol</p>
+  </div>
+
+  {
+    slides.length > 1 && (
+      <button class="hero__pause" type="button" aria-pressed="false" data-hero-pause>
+        <span class="visually-hidden">Pause background slideshow</span>
+        <svg class="hero__icon-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        </svg>
+        <svg class="hero__icon-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M8 5.5v13l11-6.5-11-6.5z" fill="currentColor" />
+        </svg>
+      </button>
+    )
+  }
+</section>
+
+{keyframes && <style is:inline set:html={keyframes} />}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-hero]').forEach((hero) => {
+    const button = hero.querySelector<HTMLButtonElement>('[data-hero-pause]');
+    button?.addEventListener('click', () => {
+      const paused = hero.toggleAttribute('data-paused');
+      button.setAttribute('aria-pressed', String(paused));
+    });
+  });
+</script>
+
+<style>
+  .hero {
+    --ink: 28, 35, 17;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    min-height: 600px;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background: rgb(var(--ink));
+    color: var(--cream);
+  }
+
+  /* ---------- Slideshow ---------- */
+  .hero__media,
+  .hero__slide {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero__slide {
+    opacity: 0;
+    animation: hero-fade var(--hero-cycle) linear infinite both;
+  }
+
+  .hero__slide:first-child {
+    opacity: 1;
+  }
+
+  .hero__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero[data-paused] .hero__slide {
+    animation-play-state: paused;
+  }
+
+  /* Legibility: darker at the top (header), left and bottom (text). */
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(var(--ink), 0.6) 0%, rgba(var(--ink), 0) 20%),
+      linear-gradient(90deg, rgba(var(--ink), 0.8) 0%, rgba(var(--ink), 0.55) 36%, rgba(var(--ink), 0) 70%),
+      linear-gradient(0deg, rgba(var(--ink), 0.6) 0%, rgba(var(--ink), 0) 55%);
+  }
+
+  /* ---------- Text ---------- */
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 780px);
+    padding: 0 32px clamp(64px, 12vh, 132px) 51px;
+    text-shadow: 0 2px 18px rgba(var(--ink), 0.35);
+  }
+
+  .hero__eyebrow {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.92;
+  }
+
+  .hero__title {
+    margin-top: 16px;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(56px, 30px + 4.6vw, 116px);
+    line-height: 1;
+    letter-spacing: -0.005em;
+  }
+
+  .hero__lead {
+    max-width: 30ch;
+    margin-top: 22px;
+    font-size: clamp(20px, 15px + 0.7vw, 27px);
+    line-height: 1.35;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 38px;
+  }
+
+  /* Primary call to action: large lime button. */
+  .hero__cta,
+  .hero__secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+    border-radius: 18px;
+    font-family: var(--font-button);
+    text-decoration: none;
+    text-shadow: none;
+  }
+
+  .hero__cta {
+    gap: 12px;
+    padding: 0 26px 0 32px;
+    background: var(--lime);
+    color: var(--olive);
+    font-size: 20px;
+    box-shadow: 0 14px 34px rgba(10, 14, 5, 0.38);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  .hero__cta svg {
+    transition: transform 0.3s ease;
+  }
+
+  .hero__cta:hover {
+    background: #f0ffa8;
+    transform: translateY(-2px);
+    box-shadow: 0 18px 42px rgba(10, 14, 5, 0.48);
+  }
+
+  .hero__cta:hover svg {
+    transform: translateX(4px);
+  }
+
+  .hero__secondary {
+    padding: 0 28px;
+    border: 1px solid rgba(255, 253, 246, 0.75);
+    color: var(--cream);
+    font-size: 18px;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .hero__secondary:hover {
+    background: rgba(255, 253, 246, 0.14);
+    border-color: var(--cream);
+  }
+
+  .hero__cta:focus-visible,
+  .hero__secondary:focus-visible,
+  .hero__pause:focus-visible {
+    outline: 3px solid var(--cream);
+    outline-offset: 3px;
+  }
+
+  .hero__note {
+    margin-top: 22px;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.4;
+    opacity: 0.88;
+  }
+
+  /* ---------- Pause button ---------- */
+  .hero__pause {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(255, 253, 246, 0.6);
+    border-radius: 50%;
+    background: rgba(var(--ink), 0.35);
+    color: var(--cream);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .hero__pause:hover {
+    background: rgba(var(--ink), 0.6);
+  }
+
+  .hero__icon-play,
+  .hero[data-paused] .hero__icon-pause {
+    display: none;
+  }
+
+  .hero[data-paused] .hero__icon-play {
+    display: block;
+  }
+
+  /* ---------- Portrait screens (phones, upright tablets) ---------- */
+  @media (max-aspect-ratio: 1/1) {
+    .hero__scrim {
+      background:
+        linear-gradient(180deg, rgba(var(--ink), 0.62) 0%, rgba(var(--ink), 0) 30%),
+        linear-gradient(0deg, rgba(var(--ink), 0.9) 0%, rgba(var(--ink), 0.62) 40%, rgba(var(--ink), 0) 70%);
+    }
+  }
+
+  /* ---------- Tablet ---------- */
+  @media (max-width: 1023.98px) {
+    .hero__content {
+      padding-left: 40px;
+    }
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 767.98px) {
+    .hero {
+      min-height: 600px;
+    }
+
+    .hero__content {
+      width: 100%;
+      padding: 0 calc(24 * var(--m)) calc(70 * var(--m));
+    }
+
+    .hero__eyebrow {
+      font-size: calc(12 * var(--m));
+      letter-spacing: 0.14em;
+    }
+
+    .hero__title {
+      margin-top: calc(12 * var(--m));
+      font-size: calc(48 * var(--m));
+    }
+
+    .hero__lead {
+      margin-top: calc(14 * var(--m));
+      font-size: calc(18 * var(--m));
+    }
+
+    .hero__actions {
+      flex-direction: column;
+      gap: calc(10 * var(--m));
+      margin-top: calc(26 * var(--m));
+    }
+
+    .hero__cta,
+    .hero__secondary {
+      width: 100%;
+      min-height: calc(50 * var(--m));
+    }
+
+    .hero__cta {
+      font-size: calc(18 * var(--m));
+    }
+
+    .hero__secondary {
+      font-size: calc(16 * var(--m));
+    }
+
+    .hero__note {
+      margin-top: calc(16 * var(--m));
+      font-size: calc(13 * var(--m));
+    }
+
+    .hero__pause {
+      right: calc(16 * var(--m));
+      bottom: calc(20 * var(--m));
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  /* Short phones: drop the small print so the text stays clear of the logo. */
+  @media (max-width: 767.98px) and (max-height: 740px) {
+    .hero__note {
+      display: none;
+    }
+
+    .hero__content {
+      padding-bottom: calc(62 * var(--m));
+    }
+
+    .hero__title {
+      font-size: calc(44 * var(--m));
+    }
+  }
+
+  /* Phones on their side: compact layout so the call to action stays on screen. */
+  @media (orientation: landscape) and (max-height: 520px) {
+    .hero {
+      min-height: 340px;
+    }
+
+    .hero__content {
+      padding-bottom: 26px;
+    }
+
+    .hero__eyebrow,
+    .hero__note {
+      display: none;
+    }
+
+    .hero__title {
+      margin-top: 0;
+      font-size: 44px;
+    }
+
+    .hero__lead {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .hero__actions {
+      flex-direction: row;
+      margin-top: 18px;
+    }
+
+    .hero__cta,
+    .hero__secondary {
+      width: auto;
+      min-height: 48px;
+      padding-inline: 22px;
+    }
+
+    .hero__cta {
+      font-size: 18px;
+    }
+
+    .hero__secondary {
+      font-size: 16px;
+    }
+  }
+
+  /* Visitors who prefer less motion get a still photo and no pause control. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__slide {
+      animation: none;
+    }
+
+    .hero__slide:not(:first-child) {
+      display: none;
+    }
+
+    .hero__pause {
+      display: none;
+    }
+  }
+</style>

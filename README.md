@@ -22,10 +22,10 @@ npm run check     # type-check the project
 
 ```
 public/
-  media/hero-*.webp       Home page hero animation (converted from the original 8 MB GIF)
   favicon.svg, ...        Icons (made from the leaf logo)
 src/
   assets/images/          Every image from the Wix site (web-sized originals, metadata stripped)
+  assets/images/hero/     Home page hero slides (see below)
   assets/instagram/       Drop Instagram post images here (see below)
   components/             Header, Footer, Instagram feed, "Free phone consultation" section, ...
   data/
@@ -40,6 +40,21 @@ src/
 
 Most text edits are made directly in the page files in `src/pages/`. Contact details, navigation and
 service prices live in `src/data/`.
+
+### Home page hero
+
+The hero fills the whole screen: a slow crossfading slideshow of the food photography with the headline and
+"Book a Free Call" button on top, and the header floating over it (home page only). Its text and buttons are in
+`src/components/HomeHero.astro`.
+
+Slides are the frames of the original Wix hero animation, in `src/assets/images/hero/`:
+
+- `frame-NN.jpg`: the wide two-photo collage, shown on landscape screens.
+- `frame-NN-portrait.jpg`: a single photo, shown on portrait screens (phones).
+
+Add, remove or reorder files there and the slideshow follows. Timing is set by `STEP` and `FADE` at the top
+of the component. Visitors who prefer reduced motion see a still photo, and there's a pause button for everyone
+else.
 
 ## Things to set up
 
@@ -81,8 +96,11 @@ Old Wix-only URLs (`/challenges`, `/single-project`, `/booking-calendar/*`) redi
 
 ## Differences from the Wix site
 
-Content and design are unchanged, apart from fixes to things that were broken on the original:
+Content and design are unchanged, apart from fixes to things that were broken on the original and one
+redesign:
 
+- The home page hero is new (see above). It replaces the 494px-tall animated banner. Its headline,
+  "Nutrition for women", was on the Wix site but hidden behind the animation.
 - No horizontal scrolling at any screen size (see above).
 - Placeholder contact details left over from the Wix template were replaced with the real ones: the
   "How I Work" email link pointed to `info@mysite.com`, its LinkedIn icon pointed to Wix's company page, and

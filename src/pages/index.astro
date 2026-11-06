@@ -1,15 +1,12 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import InstagramFeed from '../components/InstagramFeed.astro';
 import ConsultSplit from '../components/ConsultSplit.astro';
+import HomeHero from '../components/HomeHero.astro';
 import { site } from '../data/site';
-import heroStill from '../assets/images/hero-still.jpg';
 import readingMenu from '../assets/images/amelia-reading-menu.jpg';
 import greengrocer from '../assets/images/amelia-greengrocer.jpg';
-
-// Still frame of the hero animation for visitors who prefer reduced motion.
-const still = await getImage({ src: heroStill, width: 1600, format: 'webp' });
 
 const jsonLd = [
   {
@@ -33,32 +30,16 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout fullTitle="Amelia Peace Nutrition | Nutritional Therapy" description={site.description} jsonLd={jsonLd}>
-  <section class="hero">
-    <h1 class="visually-hidden">Nutrition for women</h1>
-    <div class="hero__band">
-      <picture>
-        <source media="(prefers-reduced-motion: reduce)" srcset={still.src} />
-        <source
-          type="image/webp"
-          srcset="/media/hero-800.webp 800w, /media/hero-1600.webp 1600w"
-          sizes="(min-width: 1024px) 2500px, (min-width: 600px) 100vw, 160vw"
-        />
-        <img
-          class="hero__img"
-          src="/media/hero-1600.webp"
-          alt="A changing collage of fresh seasonal produce and food"
-          width="1600"
-          height="900"
-          fetchpriority="high"
-          decoding="async"
-        />
-      </picture>
-    </div>
-  </section>
+<BaseLayout
+  fullTitle="Amelia Peace Nutrition | Nutritional Therapy"
+  description={site.description}
+  jsonLd={jsonLd}
+  overlayHeader
+>
+  <HomeHero />
 
   <div class="flow">
-    <section class="mission" aria-labelledby="mission-title">
+    <section class="mission" id="mission" aria-labelledby="mission-title">
       <div class="mission__media">
         <Image
           src={readingMenu}
@@ -128,52 +109,6 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
-  /* ---------- Hero ---------- */
-  .hero {
-    padding-top: 40px;
-  }
-
-  .hero__band {
-    position: relative;
-    height: 494px;
-    overflow: hidden;
-  }
-
-  /* Same crop as the Wix site: a 2500px-wide band, centred. */
-  .hero__img {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 2500px;
-    max-width: none;
-    height: 100%;
-    object-fit: cover;
-    transform: translateX(-50%);
-  }
-
-  @media (max-width: 1023.98px) {
-    .hero {
-      padding-top: 0;
-    }
-
-    .hero__band {
-      height: auto;
-      aspect-ratio: 16 / 7;
-    }
-
-    .hero__img {
-      left: 0;
-      width: 100%;
-      transform: none;
-    }
-  }
-
-  @media (max-width: 599.98px) {
-    .hero__band {
-      aspect-ratio: 320 / 286;
-    }
-  }
-
   /* ---------- Flow wrapper (re-orders sections on mobile, like the Wix mobile site) ---------- */
   .flow {
     display: flex;

@@ -3,11 +3,17 @@ import LeafMark from './LeafMark.astro';
 import { nav, site } from '../data/site';
 import { cleanPath } from '../utils/paths';
 
+interface Props {
+  /** Float the header over a full-screen hero (transparent, light text). */
+  overlay?: boolean;
+}
+
+const { overlay = false } = Astro.props;
 const current = cleanPath(Astro.url.pathname);
 const isCurrent = (href: string) => (href === '/' ? current === '/' : current === href || current.startsWith(`${href}/`));
 ---
 
-<header class="site-header">
+<header class:list={['site-header', { 'site-header--overlay': overlay }]}>
   <div class="site-header__inner">
     <a class="brand" href="/">
       <LeafMark class="brand__mark" />
@@ -253,6 +259,42 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
 
   :global(html.menu-open) {
     overflow: hidden;
+  }
+
+  /* ---------- Overlay variant (home page hero) ---------- */
+  .site-header--overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: transparent;
+  }
+
+  .site-header--overlay .brand,
+  .site-header--overlay .site-nav a {
+    color: var(--cream);
+    text-shadow: 0 1px 14px rgba(20, 26, 10, 0.45);
+  }
+
+  .site-header--overlay .site-nav a:hover,
+  .site-header--overlay .site-nav a[aria-current='page'] {
+    color: var(--lime);
+  }
+
+  .site-header--overlay .menu-toggle {
+    background: transparent;
+    color: var(--cream);
+  }
+
+  .site-header--overlay :focus-visible {
+    outline-color: var(--lime);
+  }
+
+  @media (max-width: 1023.98px) {
+    .site-header--overlay .site-header__inner {
+      padding-top: calc(30 * var(--m));
+      padding-bottom: 0;
+    }
   }
 
   /* Tablet + mobile: centred stacked logo, hamburger menu (as on the Wix mobile site). */
