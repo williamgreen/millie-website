@@ -1,0 +1,150 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import anpLogo from '../assets/images/anp-logo.png';
+import iconEmail from '../assets/images/icon-email.png';
+import iconInstagram from '../assets/images/icon-instagram.png';
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__name"><a href="/">{site.name}</a></p>
+    <p class="site-footer__text">
+      Amelia Peace is registered with the The Association of Naturopathic Practitioners.<br />
+      Her practice is insured through Balens.
+    </p>
+    <Image
+      class="site-footer__logo"
+      src={anpLogo}
+      alt="Association of Naturopathic Practitioners"
+      width={409}
+      height={107}
+      densities={[1, 2]}
+    />
+    <ul class="site-footer__icons" aria-label="Contact">
+      <li class="site-footer__icon site-footer__icon--email">
+        <a href={`mailto:${site.email}`}>
+          <Image src={iconEmail} alt="Email Amelia" width={21} height={21} densities={[1, 2, 3]} />
+        </a>
+      </li>
+      <li class="site-footer__icon site-footer__icon--instagram">
+        <a href={site.instagram.url} target="_blank" rel="noopener">
+          <Image src={iconInstagram} alt="Amelia on Instagram" width={21} height={21} densities={[1, 2, 3]} />
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--cream);
+    color: var(--olive);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(100% - 2 * var(--gutter), 980px);
+    margin-inline: auto;
+    padding: 74px 0 22px;
+    text-align: center;
+  }
+
+  .site-footer__name {
+    font-size: 38px;
+    line-height: 1.4;
+  }
+
+  .site-footer__name a {
+    text-decoration: none;
+  }
+
+  .site-footer__text {
+    margin-top: 20px;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  .site-footer__logo {
+    width: 409px;
+    height: auto;
+    margin-top: 34px;
+  }
+
+  .site-footer__icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 27px;
+    list-style: none;
+    margin: 58px 0 0;
+    padding: 0;
+  }
+
+  .site-footer__icon a {
+    display: grid;
+    place-items: center;
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .site-footer__icon a:hover {
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.35);
+  }
+
+  .site-footer__icon img {
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+  }
+
+  /* Mobile: logo and icons first, then name and text (Wix mobile layout). */
+  @media (max-width: 767.98px) {
+    .site-footer__inner {
+      padding: calc(38 * var(--m)) 0 calc(52 * var(--m));
+    }
+
+    .site-footer__logo {
+      order: 1;
+      width: calc(280 * var(--m));
+      max-width: 100%;
+      margin-top: 0;
+    }
+
+    .site-footer__icons {
+      order: 2;
+      flex-direction: column-reverse;
+      gap: calc(36 * var(--m));
+      margin-top: calc(68 * var(--m));
+    }
+
+    .site-footer__icon a {
+      width: calc(30 * var(--m));
+      height: calc(30 * var(--m));
+    }
+
+    .site-footer__icon img {
+      width: calc(18 * var(--m));
+      height: calc(18 * var(--m));
+    }
+
+    .site-footer__name {
+      order: 3;
+      max-width: calc(200 * var(--m));
+      margin-top: calc(80 * var(--m));
+      font-size: calc(28 * var(--m));
+    }
+
+    .site-footer__text {
+      order: 4;
+      margin-top: calc(12 * var(--m));
+      font-size: calc(19 * var(--m));
+    }
+  }
+</style>

@@ -1,0 +1,165 @@
+---
+/**
+ * "Free phone consultation" split section: text on sage on the left, the
+ * plum photo tiled on the right (on mobile the photo goes on top).
+ * Used on the home page (size="lg") and the About page (size="md").
+ */
+import { getImage } from 'astro:assets';
+import plums from '../assets/images/plums-tile.jpg';
+
+interface Props {
+  size?: 'lg' | 'md';
+  class?: string;
+}
+
+const { size = 'lg', class: className } = Astro.props;
+const tile = await getImage({ src: plums, width: 946, format: 'webp' });
+const id = `consult-title-${size}`;
+---
+
+<section class:list={['consult', `consult--${size}`, className]} aria-labelledby={id}>
+  <div class="consult__body">
+    <h2 class="consult__title" id={id}><a href="/book-online">Free phone consultation</a></h2>
+    <p class="consult__text">
+      Book in a free 20 minute consultation over the phone to chat about your symptoms. In this phone call we can also
+      explore the options for working together and I can explain how my approach can be applied to your unique
+      situation, offering some potential routes to begin improvements. I work mostly through zoom so where you're based
+      doesn’t matter, as long as you have access to Wi-Fi.
+    </p>
+    <a class="btn" href="/book-online">Book Here</a>
+  </div>
+  <div class="consult__tile" style={`background-image: url(${tile.src})`} role="img" aria-label="Plums on a white plate">
+  </div>
+</section>
+
+<style>
+  .consult {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--sage);
+  }
+
+  .consult__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .consult__title {
+    text-align: center;
+  }
+
+  .consult__title a {
+    text-decoration: none;
+  }
+
+  /* Wix shows this image tiled at its natural size, centred. */
+  .consult__tile {
+    background-color: var(--sage);
+    background-repeat: repeat;
+    background-position: center;
+    background-size: 473px 535px;
+  }
+
+  /* Home page */
+  .consult--lg {
+    min-height: 758px;
+  }
+
+  .consult--lg .consult__body {
+    padding: 97px clamp(24px, 3.5vw, 50px) 110px clamp(24px, 4vw, 58px);
+  }
+
+  .consult--lg .consult__title {
+    max-width: 440px;
+    font-size: clamp(30px, 18px + 2.75vw, 56px);
+    line-height: 1.18;
+  }
+
+  .consult--lg .consult__text {
+    max-width: 612px;
+    margin-top: 55px;
+    font-size: clamp(17px, 15.5px + 0.33vw, 20px);
+    line-height: 1.8;
+  }
+
+  .consult--lg .btn {
+    margin-top: 98px;
+  }
+
+  /* About page */
+  .consult--md {
+    min-height: 754px;
+  }
+
+  .consult--md .consult__body {
+    padding: 93px 24px 100px;
+  }
+
+  .consult--md .consult__title {
+    font-size: clamp(30px, 23px + 1.1vw, 38px);
+    line-height: 1.2;
+  }
+
+  .consult--md .consult__text {
+    max-width: 363px;
+    margin-top: 66px;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .consult--md .btn {
+    margin-top: 44px;
+  }
+
+  @media (max-width: 1023.98px) {
+    .consult--lg .consult__body {
+      padding-top: 72px;
+      padding-bottom: 72px;
+    }
+  }
+
+  /* Mobile: photo on top, text below (Wix mobile layout). */
+  @media (max-width: 767.98px) {
+    .consult {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .consult__tile {
+      order: -1;
+      aspect-ratio: 320 / 240;
+      background-size: calc(473 * var(--m)) calc(535 * var(--m));
+    }
+
+    .consult .consult__body {
+      padding: calc(21 * var(--m)) calc(24 * var(--m)) calc(32 * var(--m));
+    }
+
+    .consult--lg .consult__title {
+      max-width: calc(200 * var(--m));
+      font-size: calc(26 * var(--m));
+    }
+
+    .consult--md .consult__title {
+      font-size: calc(22 * var(--m));
+    }
+
+    .consult .consult__text {
+      max-width: none;
+      margin-top: calc(12 * var(--m));
+    }
+
+    .consult--lg .consult__text {
+      font-size: calc(17 * var(--m));
+    }
+
+    .consult--md .consult__text {
+      font-size: calc(20 * var(--m));
+    }
+
+    .consult .btn {
+      margin-top: calc(20 * var(--m));
+    }
+  }
+</style>

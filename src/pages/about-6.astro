@@ -1,0 +1,177 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import banner from '../assets/images/supper-club-table.jpg';
+---
+
+<BaseLayout title="Diet & Lifestyle Analysis">
+  <div class="page">
+    <section class="head">
+      <h1 class="head__title">Diet &amp; Lifestyle Analysis</h1>
+      <div class="head__banner">
+        <Image
+          src={banner}
+          alt="Friends sharing a candlelit supper club meal"
+          widths={[480, 800, 1200, 1600]}
+          sizes="100vw"
+          loading="eager"
+        />
+      </div>
+    </section>
+
+    <section class="detail">
+      <div class="detail__inner">
+        <h2 class="detail__lead">
+          Not ready for a full 1:1 programme yet, but want personalised feedback on your current eating habits?
+        </h2>
+        <div class="detail__text rich">
+          <h3>What’s Included:</h3>
+          <p>
+            The Diet &amp; Lifestyle Analysis is a focused mini consultation designed to help you understand how your food
+            choices, energy levels, and daily routines are either supporting your wellbeing or quietly holding you back.
+            It’s an opportunity to step back, gain clarity, and identify simple, realistic adjustments that can make a
+            meaningful difference to how you feel day to day.
+          </p>
+          <p></p>
+          <p>
+            You’ll receive a one-off personalised consultation where we’ll chat through your current cooking and eating
+            habits in a supportive, non-judgemental way. Before our 45-minute call, you’ll complete a short questionnaire
+            and a 7-day food diary so I can review your intake and identify any key nutrient or food group gaps. During
+            our session, we’ll discuss practical, realistic improvements tailored to you, and I’ll provide helpful
+            handouts with recipes and ingredient ideas where needed to support you moving forward.
+          </p>
+          <p></p>
+          <p></p>
+          <p>Perfect For anyone who would like clarity and direction before investing in a full plan</p>
+          <p class="small"></p>
+          <h3>Investment:</h3>
+          <p class="price">£75 — one-time session</p>
+        </div>
+        <a class="btn" href="/book-online">Book Here</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    background: var(--sage);
+  }
+
+  /* ---------- Title + banner ---------- */
+  .head {
+    padding-top: 70px;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+  .head__title {
+    padding-inline: var(--gutter);
+    font-size: clamp(34px, 20px + 2.6vw, 56px);
+    line-height: 1.18;
+  }
+
+  .head__banner {
+    height: clamp(220px, 24.4vw, 352px);
+    margin-top: 59px;
+    overflow: hidden;
+  }
+
+  .head__banner :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- Details ---------- */
+  .detail {
+    padding: 61px var(--gutter) 20px;
+  }
+
+  .detail__inner {
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
+  .detail__lead {
+    font-size: clamp(28px, 22px + 0.95vw, 38px);
+    line-height: 1.2;
+  }
+
+  .detail__text {
+    max-width: 868px;
+    margin-top: 64px;
+    padding-left: 7px;
+    font-size: 22px;
+    line-height: 1.4;
+  }
+
+  .detail__text h3 {
+    font-size: clamp(28px, 22px + 0.95vw, 38px);
+    line-height: 1.4;
+  }
+
+  .detail__text .small {
+    font-size: 16px;
+  }
+
+  .detail__text .price {
+    font-size: 20px;
+  }
+
+  .detail .btn {
+    margin: 32px 0 0 27px;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 767.98px) {
+    .head {
+      padding-top: calc(20 * var(--m));
+      padding-bottom: calc(3 * var(--m));
+    }
+
+    .head__title {
+      font-size: calc(27 * var(--m));
+      max-width: calc(220 * var(--m));
+      margin-inline: auto;
+      padding-inline: 0;
+    }
+
+    .head__banner {
+      height: calc(186 * var(--m));
+      margin-top: calc(20 * var(--m));
+    }
+
+    .detail {
+      padding: calc(45 * var(--m)) calc(20 * var(--m)) calc(52 * var(--m));
+    }
+
+    .detail__lead {
+      font-size: calc(24 * var(--m));
+    }
+
+    .detail__text {
+      margin-top: calc(37 * var(--m));
+      padding-left: 0;
+      font-size: calc(19 * var(--m));
+    }
+
+    .detail__text h3 {
+      font-size: calc(26 * var(--m));
+    }
+
+    .detail__text .small {
+      font-size: calc(14 * var(--m));
+    }
+
+    .detail__text .price {
+      font-size: calc(17 * var(--m));
+    }
+
+    .detail .btn {
+      display: flex;
+      width: fit-content;
+      margin: calc(34 * var(--m)) auto 0;
+    }
+  }
+</style>

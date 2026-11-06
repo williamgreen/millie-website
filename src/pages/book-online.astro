@@ -1,0 +1,190 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { services, spokenDuration } from '../data/services';
+---
+
+<BaseLayout title="Book Online">
+  <section class="services" aria-labelledby="services-title">
+    <h1 class="services__title" id="services-title">My Services</h1>
+    <ul class="services__grid">
+      {
+        services.map((service, i) => (
+          <li class="card">
+            <a class="card__media" href={`/service-page/${service.slug}`} tabindex="-1" aria-hidden="true">
+              <Image
+                src={service.image}
+                alt=""
+                widths={[300, 480, 600, 900]}
+                sizes="(min-width: 768px) 290px, 80vw"
+                loading={i < 3 ? 'eager' : 'lazy'}
+              />
+            </a>
+            <div class="card__body">
+              <h2 class="card__name">
+                <a href={`/service-page/${service.slug}`}>{service.name}</a>
+              </h2>
+              <p class="card__tagline">{service.tagline}</p>
+              <hr class="card__rule" />
+              <p class="card__meta">
+                <span aria-label={spokenDuration(service.duration)}>{service.duration}</span>
+                {service.price && <span>{service.price}</span>}
+              </p>
+              <a class="btn-book card__book" href={service.bookingUrl}>
+                Book Now<span class="visually-hidden">: {service.name}</span>
+              </a>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .services {
+    padding: 98px var(--gutter) 25px;
+  }
+
+  .services__title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 292px));
+    justify-content: center;
+    gap: 32px;
+    list-style: none;
+    margin: 63px 0 0;
+    padding: 0;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--cream);
+    border: 1px solid var(--hairline);
+  }
+
+  .card__media {
+    display: block;
+    aspect-ratio: 290 / 194;
+    overflow: hidden;
+    background: var(--hairline);
+  }
+
+  .card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .card__media:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  .card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 31px 31px 32px;
+  }
+
+  .card__name {
+    min-height: 2.66em;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.33;
+  }
+
+  .card__name a {
+    text-decoration: none;
+  }
+
+  /* The original only shows the tagline on mobile. */
+  .card__tagline {
+    display: none;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .card__rule {
+    align-self: stretch;
+    margin: 24px 0 22px;
+    border: 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .card__meta {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 2;
+  }
+
+  .card__book {
+    margin-top: auto;
+  }
+
+  @media (max-width: 1023.98px) {
+    .services__grid {
+      grid-template-columns: repeat(2, minmax(0, 292px));
+    }
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 767.98px) {
+    .services {
+      padding: calc(81 * var(--m)) calc(40 * var(--m)) calc(20 * var(--m));
+    }
+
+    .services__title {
+      font-size: calc(24 * var(--m));
+    }
+
+    .services__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: calc(20 * var(--m));
+      margin-top: calc(38 * var(--m));
+    }
+
+    .card__body {
+      align-items: stretch;
+      padding: calc(20 * var(--m));
+    }
+
+    .card__name {
+      min-height: 0;
+      font-size: calc(20 * var(--m));
+      line-height: 1.4;
+    }
+
+    .card__tagline {
+      display: block;
+      margin-top: calc(12 * var(--m));
+      font-size: calc(13 * var(--m));
+    }
+
+    .card__rule {
+      margin: calc(16 * var(--m)) 0 calc(14 * var(--m));
+    }
+
+    .card__meta {
+      font-size: calc(13 * var(--m));
+    }
+
+    .card__book {
+      min-height: calc(42 * var(--m));
+      font-size: calc(16 * var(--m));
+    }
+  }
+</style>

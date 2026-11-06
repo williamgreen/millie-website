@@ -1,0 +1,148 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import slide1 from '../assets/images/menstrual-phase-1.jpg';
+import slide2 from '../assets/images/menstrual-phase-2.jpg';
+import slide3 from '../assets/images/menstrual-phase-3.jpg';
+import slide4 from '../assets/images/menstrual-phase-4.jpg';
+import slide5 from '../assets/images/menstrual-phase-5.jpg';
+import slide6 from '../assets/images/menstrual-phase-6.jpg';
+
+const slides = [
+  { src: slide1, alt: 'Illustration: What to eat during your menstrual phase' },
+  { src: slide2, alt: 'The physiology: during menstruation, oestrogen and progesterone are at their lowest' },
+  { src: slide3, alt: 'Rebuild what’s lost: focus on replenishing iron, zinc and magnesium' },
+  { src: slide4, alt: 'Soothe inflammation and support digestion' },
+  { src: slide5, alt: 'Nourish the nervous system' },
+  { src: slide6, alt: 'Closing reflection: this phase is an invitation to retreat and rebuild' },
+];
+---
+
+<BaseLayout title="Projects">
+  <div class="page">
+    <section class="intro">
+      <h1 class="intro__title">What to Eat During your Menstrual Phase</h1>
+      <div class="intro__text rich">
+        <p>
+          A collaboration post with Bristol Illustrator Laurel Molly - click to visit her website <a
+            href="https://laurelmolly.co.uk/"
+            target="_blank"
+            rel="noopener">here.</a
+          >
+        </p>
+        <p></p>
+        <p>
+          Most women are taught to push through their period. To treat fatigue, cramps, and cravings as inconveniences
+          to suppress. But the menstrual phase isn’t a weakness. It’s an internal reset. When estrogen and progesterone
+          fall, inflammation rises, and your body begins the work of cellular repair. What it needs most is warmth,
+          minerals, and gentle nourishment , not depletion. This is the phase for slow-cooked foods, deep hydration, and
+          nutrients that rebuild: iron, magnesium, zinc, and omega-3s. It’s also the time to eat in rhythm. Smaller,
+          frequent meals if digestion feels sensitive, and comforting, whole ingredients that keep your blood sugar
+          steady. When you eat with your cycle, not against it, you stop fighting your body and start collaborating with
+          it. That’s when symptoms soften, energy stabilises, and your period becomes a time of release rather than
+          resistance.
+        </p>
+      </div>
+    </section>
+
+    <section class="slides" aria-label="Collaboration illustrations">
+      <ul class="slides__grid">
+        {
+          slides.map((slide) => (
+            <li>
+              <Image src={slide.src} alt={slide.alt} widths={[320, 600, 900, 1200]} sizes="(min-width: 768px) 599px, 90vw" />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    background: var(--sage);
+  }
+
+  /* ---------- Intro ---------- */
+  .intro {
+    padding: 122px var(--gutter) 70px;
+    text-align: center;
+  }
+
+  .intro__title {
+    font-size: clamp(30px, 18px + 2.75vw, 56px);
+    line-height: 1.18;
+  }
+
+  .intro__text {
+    max-width: 980px;
+    margin: 36px auto 0;
+    font-size: 20px;
+    line-height: 1.8;
+  }
+
+  .intro__text a {
+    text-decoration: underline;
+  }
+
+  /* ---------- Slides ---------- */
+  .slides {
+    padding: 0 var(--gutter) 80px;
+  }
+
+  .slides__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 599px));
+    justify-content: center;
+    gap: 46px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .slides__grid :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 599 / 764;
+    object-fit: cover;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 767.98px) {
+    .intro {
+      padding: calc(10 * var(--m)) calc(20 * var(--m)) calc(16 * var(--m));
+    }
+
+    .intro__title {
+      font-size: calc(29 * var(--m));
+    }
+
+    .intro__text {
+      margin-top: calc(6 * var(--m));
+      font-size: calc(20 * var(--m));
+    }
+
+    .slides {
+      padding: 0;
+      background: var(--cream);
+    }
+
+    .slides__grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .slides__grid li {
+      padding: calc(29 * var(--m)) calc(19 * var(--m)) 0;
+    }
+
+    .slides__grid li:last-child {
+      padding-bottom: calc(29 * var(--m));
+    }
+
+    .slides__grid :global(img) {
+      aspect-ratio: 283 / 354;
+    }
+  }
+</style>

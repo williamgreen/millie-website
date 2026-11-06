@@ -1,0 +1,389 @@
+---
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InstagramFeed from '../components/InstagramFeed.astro';
+import ConsultSplit from '../components/ConsultSplit.astro';
+import { site } from '../data/site';
+import heroStill from '../assets/images/hero-still.jpg';
+import readingMenu from '../assets/images/amelia-reading-menu.jpg';
+import greengrocer from '../assets/images/amelia-greengrocer.jpg';
+
+// Still frame of the hero animation for visitors who prefer reduced motion.
+const still = await getImage({ src: heroStill, width: 1600, format: 'webp' });
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org/',
+    '@type': 'LocalBusiness',
+    name: site.name,
+    url: site.url,
+    email: site.email,
+    telephone: '+447867122963',
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: site.address.country,
+      addressLocality: site.address.locality,
+      addressRegion: site.address.region,
+      postalCode: site.address.postalCode,
+      streetAddress: site.address.street,
+    },
+    sameAs: [site.instagram.url, site.linkedin],
+  },
+  { '@context': 'https://schema.org/', '@type': 'WebSite', name: site.titleSuffix, url: site.url },
+];
+---
+
+<BaseLayout fullTitle="Amelia Peace Nutrition | Nutritional Therapy" description={site.description} jsonLd={jsonLd}>
+  <section class="hero">
+    <h1 class="visually-hidden">Nutrition for women</h1>
+    <div class="hero__band">
+      <picture>
+        <source media="(prefers-reduced-motion: reduce)" srcset={still.src} />
+        <source
+          type="image/webp"
+          srcset="/media/hero-800.webp 800w, /media/hero-1600.webp 1600w"
+          sizes="(min-width: 1024px) 2500px, (min-width: 600px) 100vw, 160vw"
+        />
+        <img
+          class="hero__img"
+          src="/media/hero-1600.webp"
+          alt="A changing collage of fresh seasonal produce and food"
+          width="1600"
+          height="900"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
+    </div>
+  </section>
+
+  <div class="flow">
+    <section class="mission" aria-labelledby="mission-title">
+      <div class="mission__media">
+        <Image
+          src={readingMenu}
+          alt="Amelia reading a menu at a restaurant table"
+          widths={[480, 720, 960, 1440]}
+          sizes="(min-width: 768px) 50vw, 100vw"
+          loading="eager"
+        />
+      </div>
+      <div class="mission__body">
+        <h2 class="mission__title" id="mission-title">My Mission</h2>
+        <p class="mission__text">
+          My mission is to empower women to make informed health choices when it comes to their nutrition. I aim to
+          break down the barriers to understanding and implementing diet and lifestyle changes, making it accessible
+          and achievable for everyone. With science-backed strategies and a compassionate approach, I offer practical
+          advice and support to make healthy eating an effortless part of your lifestyle. Whether you’re looking to
+          increase energy, balance your hormones, improve gut health, or boost your mental clarity, I'm here to guide
+          you every step of the way. You can heal naturally, starting with what's on your plate.
+        </p>
+        <a class="btn btn--sm" href="/about-5">Discover More</a>
+      </div>
+    </section>
+
+    <div class="photo-band">
+      <Image
+        src={greengrocer}
+        alt="Amelia choosing fresh produce at a greengrocer"
+        widths={[480, 800, 1200, 1600, 2000, 2560]}
+        sizes="100vw"
+      />
+    </div>
+
+    <ConsultSplit size="lg" class="flow__consult" />
+  </div>
+
+  <section class="stories" aria-labelledby="stories-title">
+    <h2 class="stories__title" id="stories-title">Client Stories</h2>
+    <p class="stories__quote">''I'd highly recommend Amelia's service''</p>
+    <div class="stories__list">
+      <figure class="story">
+        <figcaption class="story__name">Leah</figcaption>
+        <blockquote class="story__text story__text--justify">
+          <p>
+            Working with Amelia for my nutritional therapy consultation has been a truly transformative experience. She
+            combines deep expertise with a compassionate, personalised approach that makes you feel truly cared for.
+            Amelia takes the time to understand your unique needs and goals, and her recommendations are both practical
+            and life-changing. Thanks to her guidance, I now feel more energized, balanced, and empowered to make
+            healthier choices every day.
+          </p>
+        </blockquote>
+      </figure>
+      <figure class="story">
+        <figcaption class="story__name">Esme</figcaption>
+        <blockquote class="story__text">
+          <p>
+            From the very first session, Amelia's warmth, knowledge, and genuine care for my well-being put me at ease.
+            She took the time to truly listen to my concerns, tailoring her approach to my unique health needs. Her
+            guidance not only helped me understand how to nourish my body better but also inspired me to make
+            sustainable, long-term changes.
+          </p>
+        </blockquote>
+      </figure>
+    </div>
+  </section>
+
+  <InstagramFeed />
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    padding-top: 40px;
+  }
+
+  .hero__band {
+    position: relative;
+    height: 494px;
+    overflow: hidden;
+  }
+
+  /* Same crop as the Wix site: a 2500px-wide band, centred. */
+  .hero__img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2500px;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+    transform: translateX(-50%);
+  }
+
+  @media (max-width: 1023.98px) {
+    .hero {
+      padding-top: 0;
+    }
+
+    .hero__band {
+      height: auto;
+      aspect-ratio: 16 / 7;
+    }
+
+    .hero__img {
+      left: 0;
+      width: 100%;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 599.98px) {
+    .hero__band {
+      aspect-ratio: 320 / 286;
+    }
+  }
+
+  /* ---------- Flow wrapper (re-orders sections on mobile, like the Wix mobile site) ---------- */
+  .flow {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- My Mission ---------- */
+  .mission {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: clamp(620px, 56vw, 807px);
+  }
+
+  .mission__media {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mission__media :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0%;
+  }
+
+  .mission__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px clamp(24px, 3.4vw, 49px) 72px;
+    text-align: center;
+  }
+
+  .mission__title {
+    font-size: clamp(36px, 19px + 2.6vw, 56px);
+    line-height: 1.35;
+  }
+
+  .mission__text {
+    max-width: 622px;
+    margin-top: 22px;
+    font-size: clamp(17px, 15.5px + 0.33vw, 20px);
+    line-height: 1.88;
+  }
+
+  .mission .btn {
+    margin-top: 62px;
+  }
+
+  /* ---------- Full-width photo ---------- */
+  .photo-band {
+    height: min(879px, 61vw);
+    overflow: hidden;
+  }
+
+  .photo-band :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- Client stories ---------- */
+  .stories {
+    background: var(--sage);
+    padding: 134px 0 8px;
+    text-align: center;
+  }
+
+  .stories__title {
+    padding-inline: var(--gutter);
+    font-size: clamp(38px, 22px + 2.55vw, 56px);
+    line-height: 1.4;
+  }
+
+  .stories__quote {
+    margin-top: 33px;
+    padding-inline: var(--gutter);
+    font-size: clamp(30px, 26.5px + 0.9vw, 38px);
+    line-height: 1.4;
+  }
+
+  .stories__list {
+    margin: 98px var(--gutter) 0;
+    border-bottom: 1px solid var(--olive);
+    text-align: left;
+  }
+
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+    gap: 24px 40px;
+    margin: 0;
+    padding: 6px 0 12px;
+    border-top: 1px solid var(--olive);
+  }
+
+  .story + .story {
+    padding-top: 6px;
+  }
+
+  .story__name {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    line-height: 1.4;
+  }
+
+  .story__text {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  .story__text--justify {
+    text-align: justify;
+  }
+
+  .story:last-child {
+    padding-bottom: 54px;
+  }
+
+  /* ---------- Tablet ---------- */
+  @media (max-width: 1023.98px) {
+    .stories {
+      padding-top: 96px;
+    }
+
+    .story {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    }
+  }
+
+  /* ---------- Mobile: single column, Wix mobile ordering and sizes ---------- */
+  @media (max-width: 767.98px) {
+    .mission {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .mission__media {
+      aspect-ratio: 320 / 260;
+    }
+
+    .mission__body {
+      padding: calc(21 * var(--m)) calc(20 * var(--m)) calc(30 * var(--m));
+    }
+
+    .mission__title {
+      font-size: calc(33 * var(--m));
+    }
+
+    .mission__text {
+      margin-top: calc(16 * var(--m));
+      font-size: calc(17 * var(--m));
+    }
+
+    .mission .btn {
+      margin-top: calc(26 * var(--m));
+    }
+
+    .flow :global(.flow__consult) {
+      order: 1;
+    }
+
+    .photo-band {
+      order: 2;
+      height: auto;
+      aspect-ratio: 320 / 367;
+    }
+
+    .stories {
+      padding-top: calc(4 * var(--m));
+    }
+
+    .stories__title {
+      font-size: calc(36 * var(--m));
+    }
+
+    .stories__quote {
+      margin-top: calc(50 * var(--m));
+      font-size: calc(30 * var(--m));
+    }
+
+    .stories__list {
+      margin: calc(40 * var(--m)) calc(10 * var(--m)) 0;
+    }
+
+    .story {
+      grid-template-columns: 1fr;
+      gap: calc(14 * var(--m));
+      padding: calc(10 * var(--m)) 0 calc(80 * var(--m));
+    }
+
+    .story + .story {
+      padding-top: calc(10 * var(--m));
+    }
+
+    .story__name {
+      font-size: calc(24 * var(--m));
+    }
+
+    .story__text {
+      padding-inline: calc(10 * var(--m));
+      font-size: calc(20 * var(--m));
+    }
+
+    .story:last-child {
+      padding-bottom: calc(60 * var(--m));
+    }
+  }
+</style>

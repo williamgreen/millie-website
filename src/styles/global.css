@@ -1,0 +1,299 @@
+/*
+ * Global styles for Amelia Peace Nutrition.
+ *
+ * Colours, fonts and sizes are taken from the original Wix theme:
+ *   cream  #FFFDF6  (page background)
+ *   olive  #46572A  (text, lines, button borders)
+ *   olive2 #6C7856  (current menu item, booking buttons)
+ *   sage   #E9EBCA  (section backgrounds)
+ *   lime   #E6FF81  (buttons, "Follow me" band)
+ */
+
+:root {
+  --cream: #fffdf6;
+  --olive: #46572a;
+  --olive-soft: #6c7856;
+  --sage: #e9ebca;
+  /* sage at 80% opacity over cream, used by some Wix sections */
+  --sage-soft: #edefd3;
+  --lime: #e6ff81;
+  --mist: #f0efe6;
+  --hairline: rgba(70, 87, 42, 0.2);
+
+  /*
+   * The original uses Avenir LT 35 Light, a commercial font licensed to Wix
+   * sites only. Apple devices ship Avenir, so they get the real thing;
+   * everyone else gets Hanken Grotesk Light, the closest free match.
+   */
+  --font-sans: 'Avenir', 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Forum', Georgia, 'Times New Roman', serif;
+  --font-button: 'Marmelad', 'Trebuchet MS', sans-serif;
+
+  --header-h: 67px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --content: 980px;
+
+  /*
+   * Mobile unit. The Wix mobile site is a 320px-wide layout that phones scale
+   * up to fit the screen, so its text and spacing grow with the screen width.
+   * Mobile sizes are written as calc(<wix px> * var(--m)) to keep that look.
+   */
+  --m: 1px;
+}
+
+@media (max-width: 767.98px) {
+  :root {
+    --m: clamp(1px, calc(100vw / 320), 1.3px);
+    --gutter: calc(20 * var(--m));
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Safety net only: layouts are built to never exceed the viewport. */
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--cream);
+  color: var(--olive);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.2;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+img,
+picture,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 300;
+}
+
+a {
+  color: inherit;
+}
+
+strong,
+b {
+  font-weight: 600;
+}
+
+/* Empty paragraphs are used as line spacers, exactly like the Wix rich text. */
+.rich p:empty::before {
+  content: '\200b';
+}
+
+.rich ul {
+  padding-left: 1.3em;
+}
+
+.rich li {
+  padding-left: 0.2em;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -100px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--olive);
+  color: var(--cream);
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--olive);
+  outline-offset: 3px;
+}
+
+/* ---------- Typography helpers ---------- */
+
+.font-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+/* ---------- Layout helpers ---------- */
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--content));
+  margin-inline: auto;
+}
+
+.bg-cream {
+  background: var(--cream);
+}
+
+.bg-sage {
+  background: var(--sage);
+}
+
+.bg-sage-soft {
+  background: var(--sage-soft);
+}
+
+.bg-lime {
+  background: var(--lime);
+}
+
+/* ---------- Buttons ---------- */
+
+/* Lime pill button ("Discover More", "Book Here"). */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  min-height: 48px;
+  padding: 0 24px;
+  background: var(--lime);
+  color: var(--olive);
+  border: 1px solid var(--olive);
+  border-radius: 16px;
+  font-family: var(--font-button);
+  font-size: 16px;
+  line-height: 1.4;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.4s ease,
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+.btn:hover {
+  background: var(--cream);
+}
+
+.btn--sm {
+  min-width: 130px;
+  min-height: 45px;
+}
+
+@media (max-width: 767.98px) {
+  .btn {
+    min-width: calc(120 * var(--m));
+    min-height: calc(40 * var(--m));
+    padding-inline: calc(20 * var(--m));
+    border-radius: calc(16 * var(--m));
+    font-size: calc(16 * var(--m));
+  }
+
+  .btn--sm {
+    min-width: calc(130 * var(--m));
+    min-height: calc(42 * var(--m));
+    font-size: calc(15 * var(--m));
+  }
+}
+
+/* Square olive button used by the booking pages ("Book Now"). */
+.btn-book {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  background: var(--olive-soft);
+  color: var(--cream);
+  border: 1px solid var(--olive-soft);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.btn-book:hover {
+  background: var(--olive);
+  border-color: var(--olive);
+}
+
+/* Outline button (Instagram feed "Load More"). */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 20px;
+  background: var(--cream);
+  color: var(--olive);
+  border: 1px solid var(--olive);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: var(--sage);
+}
+
+/* Respect users who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

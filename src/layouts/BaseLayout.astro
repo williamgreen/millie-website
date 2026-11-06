@@ -1,0 +1,97 @@
+---
+import '@fontsource/hanken-grotesk/300.css';
+import '@fontsource/hanken-grotesk/600.css';
+import '@fontsource/forum/400.css';
+import '@fontsource/marmelad/400.css';
+import '../styles/global.css';
+
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import { cleanPath } from '../utils/paths';
+import defaultShareImage from '../assets/images/amelia-reading-menu.jpg';
+
+interface Props {
+  /** Page name; rendered as "<title> | Amelia Peace Nutritional Therapy". */
+  title?: string;
+  /** Use this exact <title> instead (the home page has its own). */
+  fullTitle?: string;
+  description?: string;
+  /** Social share image (og:image). Defaults to the site's share photo. */
+  image?: ImageMetadata;
+  /** Structured data for search engines. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Set false for pages that should not be indexed (e.g. 404). */
+  index?: boolean;
+}
+
+const { title, fullTitle, description, image = defaultShareImage, jsonLd, index = true } = Astro.props;
+
+const pageTitle = fullTitle ?? (title ? `${title} | ${site.titleSuffix}` : site.titleSuffix);
+const canonical = new URL(cleanPath(Astro.url.pathname), site.url).href.replace(/\/$/, '');
+const share = await getImage({ src: image, width: Math.min(image.width, 1600), format: 'jpg', quality: 85 });
+const shareUrl = new URL(share.src, site.url).href;
+const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    {!index && <meta name="robots" content="noindex" />}
+    {index && <link rel="canonical" href={canonical} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#fffdf6" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <meta property="og:title" content={pageTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={shareUrl} />
+    <meta property="og:image:width" content={String(share.attributes.width ?? '')} />
+    <meta property="og:image:height" content={String(share.attributes.height ?? '')} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.titleSuffix} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    {description && <meta name="twitter:description" content={description} />}
+
+    {ld.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+
+    {
+      site.mailerliteAccount && (
+        <script is:inline define:vars={{ account: site.mailerliteAccount }}>
+          // MailerLite Universal: powers the "Stay up to date" newsletter pop-up.
+          (function (w, d, e, u, f, l, n) {
+            w[f] =
+              w[f] ||
+              function () {
+                (w[f].q = w[f].q || []).push(arguments);
+              };
+            l = d.createElement(e);
+            l.async = 1;
+            l.src = u;
+            n = d.getElementsByTagName(e)[0];
+            n.parentNode.insertBefore(l, n);
+          })(window, document, 'script', 'https://assets.mailerlite.com/js/universal.js', 'ml');
+          ml('account', account);
+        </script>
+      )
+    }
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,313 @@
+---
+import LeafMark from './LeafMark.astro';
+import { nav, site } from '../data/site';
+import { cleanPath } from '../utils/paths';
+
+const current = cleanPath(Astro.url.pathname);
+const isCurrent = (href: string) => (href === '/' ? current === '/' : current === href || current.startsWith(`${href}/`));
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="/">
+      <LeafMark class="brand__mark" />
+      <span class="brand__name">{site.name}</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Site">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+      <span class="visually-hidden">Open site navigation</span>
+      <span class="menu-toggle__lines" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <button class="mobile-menu__close" type="button">
+      <span class="visually-hidden">Close site navigation</span>
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+        <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+      </svg>
+    </button>
+    <nav aria-label="Site (mobile)">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <noscript>
+    <style>
+      .menu-toggle {
+        display: none !important;
+      }
+      @media (max-width: 1023.98px) {
+        .site-nav {
+          display: block !important;
+        }
+      }
+    </style>
+  </noscript>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const closeBtn = menu?.querySelector<HTMLButtonElement>('.mobile-menu__close');
+
+  if (toggle && menu && closeBtn) {
+    const open = () => {
+      menu.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      document.documentElement.classList.add('menu-open');
+      menu.querySelector<HTMLAnchorElement>('a')?.focus();
+    };
+    const close = (restoreFocus = true) => {
+      menu.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      document.documentElement.classList.remove('menu-open');
+      if (restoreFocus) toggle.focus();
+    };
+
+    toggle.addEventListener('click', open);
+    closeBtn.addEventListener('click', () => close());
+    menu.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) close(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu.hidden) close();
+    });
+    // If the window grows to desktop size while the menu is open, close it.
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+      if (e.matches && !menu.hidden) close(false);
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 20;
+    background: var(--cream);
+  }
+
+  .site-header__inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: var(--header-h);
+    padding: 0 60px 0 51px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--olive);
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .brand__mark {
+    width: 23px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  .brand__name {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    line-height: 1.4;
+    padding-top: 4px;
+    white-space: nowrap;
+  }
+
+  .site-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-nav a {
+    display: block;
+    padding: 4px clamp(8px, 1.05vw, 15px);
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--olive);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.4s ease;
+  }
+
+  .site-nav a:hover,
+  .site-nav a[aria-current='page'] {
+    color: var(--olive-soft);
+  }
+
+  .menu-toggle {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    background: var(--cream);
+    border: 0;
+    color: var(--olive);
+    cursor: pointer;
+  }
+
+  .menu-toggle__lines {
+    display: grid;
+    gap: 7px;
+    width: 24px;
+    margin: 0 auto;
+  }
+
+  .menu-toggle__lines span {
+    display: block;
+    height: 1.5px;
+    background: currentColor;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    overflow-y: auto;
+    background: var(--cream);
+    padding: 58px 20px 40px;
+  }
+
+  .mobile-menu[hidden] {
+    display: none;
+  }
+
+  .mobile-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  .mobile-menu li + li {
+    margin-top: 10px;
+  }
+
+  .mobile-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    font-family: var(--font-serif);
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--olive);
+    text-decoration: none;
+  }
+
+  .mobile-menu a[aria-current='page'] {
+    color: var(--olive-soft);
+  }
+
+  .mobile-menu__close {
+    position: absolute;
+    top: 17px;
+    right: 19px;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: var(--olive);
+    cursor: pointer;
+  }
+
+  :global(html.menu-open) {
+    overflow: hidden;
+  }
+
+  /* Tablet + mobile: centred stacked logo, hamburger menu (as on the Wix mobile site). */
+  @media (max-width: 1023.98px) {
+    .site-header__inner {
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0;
+      height: auto;
+      padding: calc(70 * var(--m)) 64px calc(62 * var(--m));
+    }
+
+    .brand {
+      flex-direction: column;
+      gap: calc(22 * var(--m));
+    }
+
+    .brand__mark {
+      width: calc(21 * var(--m));
+      height: calc(20 * var(--m));
+    }
+
+    .brand__name {
+      font-size: calc(19 * var(--m));
+      padding-top: 0;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .site-nav {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .site-nav ul {
+      justify-content: center;
+    }
+
+    .menu-toggle {
+      display: block;
+      top: calc(2 * var(--m));
+      right: calc(6 * var(--m));
+      width: calc(50 * var(--m));
+      height: calc(50 * var(--m));
+    }
+
+    .menu-toggle__lines {
+      width: calc(23 * var(--m));
+      gap: calc(7 * var(--m));
+    }
+  }
+
+  @media (min-width: 1024px) and (max-width: 1180px) {
+    .site-header__inner {
+      padding-inline: 32px 36px;
+    }
+  }
+</style>
