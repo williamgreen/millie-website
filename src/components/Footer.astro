@@ -1,150 +1,191 @@
 ---
 import { Image } from 'astro:assets';
-import { site } from '../data/site';
+import LeafMark from './LeafMark.astro';
+import Arrow from './Arrow.astro';
+import { nav, site } from '../data/site';
 import anpLogo from '../assets/images/anp-logo.png';
-import iconEmail from '../assets/images/icon-email.png';
-import iconInstagram from '../assets/images/icon-instagram.png';
+
+const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="site-footer__inner">
-    <p class="site-footer__name"><a href="/">{site.name}</a></p>
-    <p class="site-footer__text">
-      Amelia Peace is registered with the The Association of Naturopathic Practitioners.<br />
-      Her practice is insured through Balens.
-    </p>
-    <Image
-      class="site-footer__logo"
-      src={anpLogo}
-      alt="Association of Naturopathic Practitioners"
-      width={409}
-      height={107}
-      densities={[1, 2]}
-    />
-    <ul class="site-footer__icons" aria-label="Contact">
-      <li class="site-footer__icon site-footer__icon--email">
-        <a href={`mailto:${site.email}`}>
-          <Image src={iconEmail} alt="Email Amelia" width={21} height={21} densities={[1, 2, 3]} />
+  <div class="container">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a class="site-footer__logo" href="/">
+          <LeafMark class="site-footer__mark" width={30} height={29} />
+          <span>{site.name}</span>
         </a>
-      </li>
-      <li class="site-footer__icon site-footer__icon--instagram">
-        <a href={site.instagram.url} target="_blank" rel="noopener">
-          <Image src={iconInstagram} alt="Amelia on Instagram" width={21} height={21} densities={[1, 2, 3]} />
-        </a>
-      </li>
-    </ul>
+        <p class="site-footer__tagline">
+          Nutrition for women. Heal yourself naturally, starting with what’s on your plate.
+        </p>
+        <a class="btn btn--sm" href="/service-page/free-phone-consultation-1">Book a Free Call <Arrow size={18} /></a>
+      </div>
+
+      <nav class="site-footer__col" aria-label="Footer">
+        <p class="eyebrow">Explore</p>
+        <ul>
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="site-footer__col">
+        <p class="eyebrow">Get in touch</p>
+        <ul>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={`tel:+44${site.phone.slice(1)}`}>{site.phone}</a></li>
+          <li><a href={site.instagram.url} target="_blank" rel="noopener">Instagram {site.instagram.handle}</a></li>
+          <li><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+        </ul>
+        <p class="site-footer__where">Online via Zoom, and 1:1 in Bristol.</p>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <span class="site-footer__badge">
+        <Image src={anpLogo} alt="Association of Naturopathic Practitioners" width={180} densities={[1, 2]} />
+      </span>
+      <p class="site-footer__legal">
+        Amelia Peace is registered with the The Association of Naturopathic Practitioners. Her practice is insured
+        through Balens.
+      </p>
+      <p class="site-footer__copy">© {year} {site.name}</p>
+    </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    background: var(--cream);
-    color: var(--olive);
+    background: var(--ink);
+    color: var(--cream);
+    padding: clamp(64px, 7vw, 112px) 0 clamp(28px, 3vw, 40px);
+    font-size: var(--text-small);
   }
 
-  .site-footer__inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: min(100% - 2 * var(--gutter), 980px);
-    margin-inline: auto;
-    padding: 74px 0 22px;
-    text-align: center;
-  }
-
-  .site-footer__name {
-    font-size: 38px;
-    line-height: 1.4;
-  }
-
-  .site-footer__name a {
+  .site-footer a {
     text-decoration: none;
   }
 
-  .site-footer__text {
-    margin-top: 20px;
-    font-size: 20px;
-    line-height: 1.4;
+  .site-footer__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(40px, 6vw, 96px);
   }
 
   .site-footer__logo {
-    width: 409px;
-    height: auto;
-    margin-top: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 22px + 0.8vw, 34px);
+    line-height: 1.1;
   }
 
-  .site-footer__icons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 27px;
+  .site-footer__tagline {
+    max-width: 30ch;
+    margin: 18px 0 28px;
+    font-size: var(--text-body);
+    line-height: 1.5;
+    color: rgba(255, 253, 246, 0.82);
+  }
+
+  .site-footer .btn {
+    box-shadow: none;
+  }
+
+  .site-footer__col .eyebrow {
+    color: rgba(255, 253, 246, 0.6);
+  }
+
+  .site-footer__col ul {
+    display: grid;
+    gap: 10px;
     list-style: none;
-    margin: 58px 0 0;
+    margin: 0;
     padding: 0;
   }
 
-  .site-footer__icon a {
+  .site-footer__col a {
+    font-size: 16px;
+    color: var(--cream);
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 5px;
+    transition: text-decoration-color 0.3s ease;
+    overflow-wrap: anywhere;
+  }
+
+  .site-footer__col a:hover {
+    text-decoration-color: var(--lime);
+  }
+
+  .site-footer__where {
+    margin-top: 22px;
+    color: rgba(255, 253, 246, 0.72);
+  }
+
+  .site-footer__bottom {
     display: grid;
-    place-items: center;
-    width: 33px;
-    height: 33px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 14px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 28px;
+    margin-top: clamp(48px, 6vw, 88px);
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 253, 246, 0.16);
   }
 
-  .site-footer__icon a:hover {
-    box-shadow: 0 0 14px rgba(0, 0, 0, 0.35);
+  /* The ANP logo is teal on transparent, so it sits on a cream badge. */
+  .site-footer__badge {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--cream);
   }
 
-  .site-footer__icon img {
-    width: 21px;
-    height: 21px;
-    border-radius: 50%;
+  .site-footer__badge :global(img) {
+    width: 180px;
+    height: auto;
   }
 
-  /* Mobile: logo and icons first, then name and text (Wix mobile layout). */
-  @media (max-width: 767.98px) {
-    .site-footer__inner {
-      padding: calc(38 * var(--m)) 0 calc(52 * var(--m));
+  .site-footer__legal {
+    max-width: 62ch;
+    color: rgba(255, 253, 246, 0.78);
+  }
+
+  .site-footer__copy {
+    color: rgba(255, 253, 246, 0.6);
+    white-space: nowrap;
+  }
+
+  .site-footer :focus-visible {
+    outline-color: var(--lime);
+  }
+
+  @media (max-width: 899.98px) {
+    .site-footer__top {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
-    .site-footer__logo {
-      order: 1;
-      width: calc(280 * var(--m));
-      max-width: 100%;
-      margin-top: 0;
+    .site-footer__brand {
+      grid-column: 1 / -1;
     }
 
-    .site-footer__icons {
-      order: 2;
-      flex-direction: column-reverse;
-      gap: calc(36 * var(--m));
-      margin-top: calc(68 * var(--m));
+    .site-footer__bottom {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: start;
+      gap: 18px;
     }
+  }
 
-    .site-footer__icon a {
-      width: calc(30 * var(--m));
-      height: calc(30 * var(--m));
-    }
-
-    .site-footer__icon img {
-      width: calc(18 * var(--m));
-      height: calc(18 * var(--m));
-    }
-
-    .site-footer__name {
-      order: 3;
-      max-width: calc(200 * var(--m));
-      margin-top: calc(80 * var(--m));
-      font-size: calc(28 * var(--m));
-    }
-
-    .site-footer__text {
-      order: 4;
-      margin-top: calc(12 * var(--m));
-      font-size: calc(19 * var(--m));
+  @media (max-width: 479.98px) {
+    .site-footer__top {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

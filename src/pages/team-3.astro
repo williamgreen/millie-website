@@ -1,322 +1,277 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import BookingCta from '../components/BookingCta.astro';
+import Arrow from '../components/Arrow.astro';
 import { site } from '../data/site';
 import step1 from '../assets/images/step-1-free-call.jpg';
 import step2 from '../assets/images/step-2-initial-consultation.jpg';
 import step3 from '../assets/images/amelia-reading-menu.jpg';
-import linkedinIcon from '../assets/images/social-linkedin.png';
+import vegetables from '../assets/images/vegetable-tray.png';
 ---
 
 <BaseLayout title="How I Work">
-  <section class="intro">
-    <h1 class="intro__title">How I work</h1>
-  </section>
+  <PageHeader eyebrow="Working together" title="How I work">
+    <Fragment slot="actions">
+      <a class="btn" href="/service-page/free-phone-consultation-1">Book a Free Call <Arrow /></a>
+      <a class="btn btn--outline" href="/general-1">See packages</a>
+    </Fragment>
+  </PageHeader>
 
-  <section class="steps" aria-label="Steps">
-    <div class="steps__grid">
-      <article class="step">
-        <div class="step__media">
-          <Image src={step1} alt="Amelia reading by a café window" widths={[240, 480, 720]} sizes="237px" />
-        </div>
-        <h2 class="step__title">Step 1<br /><span class="font-serif">Book a Free Call</span></h2>
-        <div class="step__text rich">
-          <p>
-            Book in a free 20 minute consultation over the phone to chat about your symptoms. In this phone call we can
-            also explore the options for working together and I can explain how my approach can be applied to your unique
-            situation, offering some potential routes to begin improvements. I work mostly through zoom so where you're
-            based doesn't matter, as long as you have access to Wi-Fi.
-          </p>
-        </div>
-      </article>
+  <section class="section section--cream" aria-label="Steps">
+    <div class="container">
+      <ol class="steps">
+        <li class="step">
+          <div class="step__media">
+            <Image
+              src={step1}
+              alt="Amelia reading by a café window"
+              widths={[360, 540, 720]}
+              sizes="(min-width: 1024px) 30vw, (min-width: 700px) 45vw, 100vw"
+              class="media-cover"
+            />
+          </div>
+          <div class="step__body">
+            <p class="eyebrow">Step 1</p>
+            <h2 class="h3">Book a Free Call</h2>
+            <p>
+              Book in a free 20 minute consultation over the phone to chat about your symptoms. In this phone call we
+              can also explore the options for working together and I can explain how my approach can be applied to your
+              unique situation, offering some potential routes to begin improvements. I work mostly through zoom so where
+              you're based doesn't matter, as long as you have access to Wi-Fi.
+            </p>
+          </div>
+        </li>
 
-      <article class="step">
-        <div class="step__media">
-          <Image src={step2} alt="Amelia writing notes on paper" widths={[240, 480, 720]} sizes="237px" />
-        </div>
-        <h2 class="step__title">Step 2<br />Initial Consulation</h2>
-        <div class="step__text rich">
-          <p>Pre appointment health questionnaire:</p>
-          <p>
-            If you decide you would like to work with me, I will send you a detailed health questionnaire for me to get
-            all the information I need before the session. This will include any medications you are on, family health
-            history and your main health concerns.
-          </p>
-          <p></p>
-          <p>
-            All new clients will start with a 75 - 90 minutes session in which we will use the questionnaire to talk
-            through and delve deeper into your current health status and lifestyle. The information gained in the
-            pre-appointment questionnaire will allow me a more detailed picture to best help and allow us to better focus
-            our time together.
-          </p>
-          <p></p>
-          <p>You will receive:</p>
-          <p class="dot">·       A bespoke plan of food &amp; lifestyle recommendations, tailored to your needs</p>
-          <p class="dot">·       Recommendations for high-quality supplements, if required.</p>
-          <p class="dot">·       Recommendations for functional testing, if necessary.</p>
-          <p class="dot">·       A clear focus until we meet again.</p>
-        </div>
-      </article>
+        <li class="step">
+          <div class="step__media">
+            <Image
+              src={step2}
+              alt="Amelia writing notes on paper"
+              widths={[360, 540, 720]}
+              sizes="(min-width: 1024px) 30vw, (min-width: 700px) 45vw, 100vw"
+              class="media-cover"
+              style="object-position: 50% 30%"
+            />
+          </div>
+          <div class="step__body">
+            <p class="eyebrow">Step 2</p>
+            <h2 class="h3">Initial Consulation</h2>
+            <h3 class="step__sub">Pre appointment health questionnaire:</h3>
+            <p>
+              If you decide you would like to work with me, I will send you a detailed health questionnaire for me to get
+              all the information I need before the session. This will include any medications you are on, family health
+              history and your main health concerns.
+            </p>
+            <p>
+              All new clients will start with a 75 - 90 minutes session in which we will use the questionnaire to talk
+              through and delve deeper into your current health status and lifestyle. The information gained in the
+              pre-appointment questionnaire will allow me a more detailed picture to best help and allow us to better
+              focus our time together.
+            </p>
+            <h3 class="step__sub">You will receive:</h3>
+            <ul class="ticks">
+              <li>A bespoke plan of food &amp; lifestyle recommendations, tailored to your needs</li>
+              <li>Recommendations for high-quality supplements, if required.</li>
+              <li>Recommendations for functional testing, if necessary.</li>
+              <li>A clear focus until we meet again.</li>
+            </ul>
+          </div>
+        </li>
 
-      <article class="step">
-        <div class="step__media step__media--lg">
-          <Image src={step3} alt="Amelia reading a menu at a restaurant table" widths={[240, 480, 720]} sizes="243px" />
-        </div>
-        <h2 class="step__title">Step 3<br />Follow-up</h2>
-        <div class="step__text rich">
-          <p>
-            Six weeks later we will meet for a follow up consultation - this is a chance to discuss what's working for
-            you and what needs to be adjusted. We can build on the original plan and introduce more points.
-          </p>
-          <p></p>
-          <ul>
-            <li>
-              Interpretation and analysis of test results and new points on the plan to reflect the information
-              highlighted.
-            </li>
-            <li>A chance to discuss any new symptoms</li>
-            <li>Additional research</li>
-            <li>A clear plan to go away with or until we meet again</li>
-            <li>Email support, if required</li>
-          </ul>
-          <p></p>
-          <p>
-            From here, the amount of follow up sessions and the length in-between will be on a case by case basis. We
-            can be flexible and discuss what will work for you.
-          </p>
-        </div>
-      </article>
+        <li class="step">
+          <div class="step__media">
+            <Image
+              src={step3}
+              alt="Amelia reading a menu at a restaurant table"
+              widths={[360, 540, 720]}
+              sizes="(min-width: 1024px) 30vw, (min-width: 700px) 45vw, 100vw"
+              class="media-cover"
+              style="object-position: 50% 15%"
+            />
+          </div>
+          <div class="step__body">
+            <p class="eyebrow">Step 3</p>
+            <h2 class="h3">Follow-up</h2>
+            <p>
+              Six weeks later we will meet for a follow up consultation - this is a chance to discuss what's working for
+              you and what needs to be adjusted. We can build on the original plan and introduce more points.
+            </p>
+            <ul class="ticks">
+              <li>
+                Interpretation and analysis of test results and new points on the plan to reflect the information
+                highlighted.
+              </li>
+              <li>A chance to discuss any new symptoms</li>
+              <li>Additional research</li>
+              <li>A clear plan to go away with or until we meet again</li>
+              <li>Email support, if required</li>
+            </ul>
+            <p>
+              From here, the amount of follow up sessions and the length in-between will be on a case by case basis. We
+              can be flexible and discuss what will work for you.
+            </p>
+          </div>
+        </li>
+      </ol>
     </div>
   </section>
 
-  <section class="contact" aria-label="Contact">
-    <div class="contact__item">
-      <p class="contact__label">Email</p>
-      <p class="contact__value"><a href={`mailto:${site.email}`}>{site.email}</a></p>
-    </div>
-    <div class="contact__item">
-      <p class="contact__label">Call</p>
-      <p class="contact__value"><a href={`tel:+44${site.phone.slice(1)}`}>{site.phone}</a></p>
-    </div>
-    <div class="contact__item contact__item--follow">
-      <p class="contact__label font-serif">Follow</p>
-      <a class="contact__social" href={site.linkedin} target="_blank" rel="noopener">
-        <Image src={linkedinIcon} alt="LinkedIn" width={25} height={25} densities={[1, 2, 3]} />
-      </a>
+  <section class="section section--mist" aria-labelledby="contact-title">
+    <div class="container contact">
+      <div class="contact__intro">
+        <p class="eyebrow">Contact</p>
+        <h2 class="h2" id="contact-title">Get in touch</h2>
+      </div>
+      <ul class="contact__cards">
+        <li class="contact__card">
+          <p class="eyebrow">Email</p>
+          <a class="contact__value" href={`mailto:${site.email}`}>{site.email}</a>
+        </li>
+        <li class="contact__card">
+          <p class="eyebrow">Call</p>
+          <a class="contact__value" href={`tel:+44${site.phone.slice(1)}`}>{site.phone}</a>
+        </li>
+        <li class="contact__card">
+          <p class="eyebrow">Follow</p>
+          <span class="contact__links">
+            <a class="contact__value" href={site.instagram.url} target="_blank" rel="noopener">Instagram</a>
+            <a class="contact__value" href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+          </span>
+        </li>
+      </ul>
     </div>
   </section>
+
+  <BookingCta tone="lime" image={vegetables} imageAlt="A tray of fresh vegetables" />
 </BaseLayout>
 
 <style>
-  /* ---------- Title ---------- */
-  .intro {
-    padding: 64px var(--gutter) 47px;
-    text-align: center;
-  }
-
-  .intro__title {
-    font-size: clamp(34px, 20px + 2.6vw, 56px);
-    line-height: 1.18;
-  }
-
-  /* ---------- Steps ---------- */
   .steps {
-    background: var(--sage-soft);
-    padding: 130px var(--gutter) 61px;
-  }
-
-  .steps__grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 280px));
-    grid-template-rows: auto auto auto;
-    justify-content: center;
-    column-gap: 61px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 2.5vw, 32px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
   .step {
-    display: grid;
-    grid-row: span 3;
-    grid-template-rows: subgrid;
-    row-gap: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--sage);
   }
 
   .step__media {
-    justify-self: center;
-    width: 237px;
-    height: 237px;
-    margin-top: 6px;
-    border-radius: 50%;
-    overflow: hidden;
+    aspect-ratio: 4 / 3;
   }
 
-  .step__media--lg {
-    width: 243px;
-    height: 243px;
-    margin-top: 0;
+  .step__body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: clamp(24px, 3vw, 36px);
   }
 
-  .step__media :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .step__body .eyebrow {
+    margin-bottom: 0;
   }
 
-  .step__title {
-    margin-top: 75px;
-    font-size: clamp(30px, 23px + 1.1vw, 38px);
-    line-height: 1.4;
-    text-align: center;
+  .step__body .h3 {
+    margin-bottom: 4px;
   }
 
-  .step__title .font-serif {
+  .step__sub {
+    margin-top: 8px;
+    font-family: var(--font-sans);
     font-weight: 400;
+    font-size: var(--text-body);
+    line-height: 1.4;
   }
 
-  .step__text {
-    margin-top: 13px;
-    font-size: 20px;
-    line-height: 1.2;
+  .step .ticks {
+    gap: 10px;
   }
 
-  .step__text .dot {
-    white-space: pre-wrap;
-  }
-
-  .step__text ul {
-    padding-left: 32px;
-  }
-
-  .step__text li {
-    padding-left: 4px;
-  }
-
-  /* ---------- Contact strip ---------- */
+  /* Contact */
   .contact {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 24px;
-    margin: 21px 40px 40px;
-    padding: 58px clamp(24px, 9vw, 133px) 54px;
-    background: var(--sage-soft);
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    gap: clamp(32px, 5vw, 80px);
   }
 
-  .contact__label {
-    font-size: 16px;
-    line-height: 1.2;
+  .contact__cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .contact__card {
+    padding: 24px;
+    border-radius: var(--radius);
+    background: var(--cream);
+  }
+
+  .contact__card .eyebrow {
+    margin-bottom: 10px;
   }
 
   .contact__value {
-    margin-top: 15px;
-    font-size: 16px;
-    line-height: 1.2;
-  }
-
-  .contact__value a {
+    font-size: 17px;
+    font-weight: 400;
     text-decoration: none;
+    overflow-wrap: anywhere;
   }
 
-  .contact__value a:hover {
+  .contact__value:hover {
     text-decoration: underline;
   }
 
-  .contact__item--follow {
+  .contact__links {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 16px;
   }
 
-  .contact__social {
-    display: block;
-    margin-top: 9px;
-  }
-
-  .contact__social :global(img) {
-    width: 25px;
-    height: 25px;
-  }
-
-  /* ---------- Tablet ---------- */
-  @media (max-width: 1023.98px) {
-    .steps__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      column-gap: 32px;
-    }
-
-    .step__media,
-    .step__media--lg {
-      width: min(100%, 200px);
-      height: auto;
-      aspect-ratio: 1;
-    }
-
-    .step__title {
-      margin-top: 48px;
-    }
-
-    .step__text {
-      font-size: 18px;
-    }
-  }
-
-  /* ---------- Mobile: steps stacked ---------- */
-  @media (max-width: 767.98px) {
-    .intro {
-      padding: calc(14 * var(--m)) var(--gutter) calc(28 * var(--m));
-    }
-
-    .intro__title {
-      font-size: calc(32 * var(--m));
-    }
-
+  @media (max-width: 1099.98px) {
     .steps {
-      padding: calc(55 * var(--m)) calc(20 * var(--m)) calc(40 * var(--m));
-    }
-
-    .steps__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .step {
-      grid-row: auto;
-      grid-template-rows: none;
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     }
 
-    .step + .step {
-      margin-top: calc(34 * var(--m));
-    }
-
-    .step__media,
-    .step__media--lg {
-      width: calc(170 * var(--m));
-      height: calc(170 * var(--m));
-      margin-top: 0;
-    }
-
-    .step__title {
-      margin-top: calc(42 * var(--m));
-      font-size: calc(30 * var(--m));
-    }
-
-    .step__text {
-      margin-top: calc(20 * var(--m));
-      font-size: calc(20 * var(--m));
+    .step__media {
+      aspect-ratio: auto;
+      min-height: 100%;
     }
 
     .contact {
-      grid-template-columns: 1fr;
-      gap: calc(24 * var(--m));
-      margin: calc(20 * var(--m));
-      padding: calc(32 * var(--m)) calc(24 * var(--m));
-      text-align: center;
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 699.98px) {
+    .step {
+      display: flex;
     }
 
-    .contact__label,
-    .contact__value {
-      font-size: calc(16 * var(--m));
+    .step__media {
+      aspect-ratio: 4 / 3;
+      min-height: 0;
     }
 
-    .contact__value {
-      margin-top: calc(8 * var(--m));
+    .contact__cards {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

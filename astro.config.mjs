@@ -25,6 +25,9 @@ export default defineConfig({
     '/booking-calendar/diet-lifestyle-analysis': '/service-page/diet-lifestyle-analysis',
   },
   integrations: [sitemap()],
+  devToolbar: {
+    enabled: false,
+  },
   image: {
     // We size and crop images ourselves in CSS (object-fit), so skip Astro's
     // injected responsive styles.

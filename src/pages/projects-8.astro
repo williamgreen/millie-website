@@ -1,12 +1,15 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import BookingCta from '../components/BookingCta.astro';
 import slide1 from '../assets/images/menstrual-phase-1.jpg';
 import slide2 from '../assets/images/menstrual-phase-2.jpg';
 import slide3 from '../assets/images/menstrual-phase-3.jpg';
 import slide4 from '../assets/images/menstrual-phase-4.jpg';
 import slide5 from '../assets/images/menstrual-phase-5.jpg';
 import slide6 from '../assets/images/menstrual-phase-6.jpg';
+import plates from '../assets/images/service-diet-lifestyle-analysis.jpg';
 
 const slides = [
   { src: slide1, alt: 'Illustration: What to eat during your menstrual phase' },
@@ -19,130 +22,104 @@ const slides = [
 ---
 
 <BaseLayout title="Projects">
-  <div class="page">
-    <section class="intro">
-      <h1 class="intro__title">What to Eat During your Menstrual Phase</h1>
-      <div class="intro__text rich">
-        <p>
-          A collaboration post with Bristol Illustrator Laurel Molly - click to visit her website <a
-            href="https://laurelmolly.co.uk/"
-            target="_blank"
-            rel="noopener">here.</a
-          >
-        </p>
-        <p></p>
-        <p>
-          Most women are taught to push through their period. To treat fatigue, cramps, and cravings as inconveniences
-          to suppress. But the menstrual phase isn’t a weakness. It’s an internal reset. When estrogen and progesterone
-          fall, inflammation rises, and your body begins the work of cellular repair. What it needs most is warmth,
-          minerals, and gentle nourishment , not depletion. This is the phase for slow-cooked foods, deep hydration, and
-          nutrients that rebuild: iron, magnesium, zinc, and omega-3s. It’s also the time to eat in rhythm. Smaller,
-          frequent meals if digestion feels sensitive, and comforting, whole ingredients that keep your blood sugar
-          steady. When you eat with your cycle, not against it, you stop fighting your body and start collaborating with
-          it. That’s when symptoms soften, energy stabilises, and your period becomes a time of release rather than
-          resistance.
-        </p>
-      </div>
-    </section>
+  <PageHeader
+    eyebrow="Collaboration"
+    title="What to Eat During your Menstrual Phase"
+    size="md"
+    image={slide1}
+    imageAlt="Illustration of a woman carrying beetroot, by Laurel Molly"
+  >
+    <p>
+      A collaboration post with Bristol Illustrator Laurel Molly - click to visit her website <a
+        href="https://laurelmolly.co.uk/"
+        target="_blank"
+        rel="noopener">here.</a
+      >
+    </p>
+  </PageHeader>
 
-    <section class="slides" aria-label="Collaboration illustrations">
-      <ul class="slides__grid">
+  <section class="section section--cream" aria-label="About this collaboration">
+    <div class="container--narrow article">
+      <p class="article__lead">
+        Most women are taught to push through their period. To treat fatigue, cramps, and cravings as inconveniences to
+        suppress. But the menstrual phase isn’t a weakness. It’s an internal reset.
+      </p>
+      <p>
+        When estrogen and progesterone fall, inflammation rises, and your body begins the work of cellular repair. What it
+        needs most is warmth, minerals, and gentle nourishment , not depletion. This is the phase for slow-cooked foods,
+        deep hydration, and nutrients that rebuild: iron, magnesium, zinc, and omega-3s. It’s also the time to eat in
+        rhythm. Smaller, frequent meals if digestion feels sensitive, and comforting, whole ingredients that keep your
+        blood sugar steady. When you eat with your cycle, not against it, you stop fighting your body and start
+        collaborating with it. That’s when symptoms soften, energy stabilises, and your period becomes a time of release
+        rather than resistance.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--mist" aria-labelledby="gallery-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Illustrated by Laurel Molly</p>
+        <h2 class="h2" id="gallery-title">The series</h2>
+      </div>
+      <ul class="gallery">
         {
           slides.map((slide) => (
-            <li>
-              <Image src={slide.src} alt={slide.alt} widths={[320, 600, 900, 1200]} sizes="(min-width: 768px) 599px, 90vw" />
+            <li class="gallery__item">
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                widths={[360, 540, 720, 1080]}
+                sizes="(min-width: 1100px) 30vw, (min-width: 640px) 46vw, 100vw"
+                class="media-cover"
+              />
             </li>
           ))
         }
       </ul>
-    </section>
-  </div>
+    </div>
+  </section>
+
+  <BookingCta tone="sage" image={plates} imageAlt="Plates of colourful food being shared at a table" />
 </BaseLayout>
 
 <style>
-  .page {
-    background: var(--sage);
+  .article > * + * {
+    margin-top: 1.2em;
   }
 
-  /* ---------- Intro ---------- */
-  .intro {
-    padding: 122px var(--gutter) 70px;
-    text-align: center;
+  .article__lead {
+    font-family: var(--font-serif);
+    font-size: var(--text-h3);
+    line-height: 1.25;
+    text-wrap: balance;
   }
 
-  .intro__title {
-    font-size: clamp(30px, 18px + 2.75vw, 56px);
-    line-height: 1.18;
-  }
-
-  .intro__text {
-    max-width: 980px;
-    margin: 36px auto 0;
-    font-size: 20px;
-    line-height: 1.8;
-  }
-
-  .intro__text a {
-    text-decoration: underline;
-  }
-
-  /* ---------- Slides ---------- */
-  .slides {
-    padding: 0 var(--gutter) 80px;
-  }
-
-  .slides__grid {
+  .gallery {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 599px));
-    justify-content: center;
-    gap: 46px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(16px, 2.5vw, 32px);
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .slides__grid :global(img) {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 599 / 764;
-    object-fit: cover;
+  .gallery__item {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--cream);
   }
 
-  /* ---------- Mobile ---------- */
-  @media (max-width: 767.98px) {
-    .intro {
-      padding: calc(10 * var(--m)) calc(20 * var(--m)) calc(16 * var(--m));
+  @media (max-width: 1099.98px) {
+    .gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+  }
 
-    .intro__title {
-      font-size: calc(29 * var(--m));
-    }
-
-    .intro__text {
-      margin-top: calc(6 * var(--m));
-      font-size: calc(20 * var(--m));
-    }
-
-    .slides {
-      padding: 0;
-      background: var(--cream);
-    }
-
-    .slides__grid {
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-
-    .slides__grid li {
-      padding: calc(29 * var(--m)) calc(19 * var(--m)) 0;
-    }
-
-    .slides__grid li:last-child {
-      padding-bottom: calc(29 * var(--m));
-    }
-
-    .slides__grid :global(img) {
-      aspect-ratio: 283 / 354;
+  @media (max-width: 639.98px) {
+    .gallery {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

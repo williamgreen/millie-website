@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import { site } from '../../data/site';
 import { events, type SiteEvent } from '../../data/events';
 
@@ -34,43 +34,40 @@ const jsonLd = {
 ---
 
 <BaseLayout title={event.title} description={event.about} image={event.image} jsonLd={jsonLd}>
-  <article class="event">
-    <header class="event__head">
-      <div class="event__intro">
-        <h1 class="event__title">{event.title}</h1>
-        <p class="event__when">
-          <span>{event.shortDate}</span><span class="event__sep" aria-hidden="true">|</span><span>{event.venue}</span>
-        </p>
-        <hr class="event__rule" />
-        <p class="event__status">{event.ticketsOnSale ? 'Tickets on sale' : 'Tickets are not on sale'}</p>
-        <a class="event__other" href="/">See other events</a>
-      </div>
-      <div class="event__image">
-        <Image
-          src={event.image}
-          alt={event.title}
-          widths={[480, 980, 1225]}
-          sizes="(min-width: 1024px) 979px, 100vw"
-          loading="eager"
-        />
-      </div>
-    </header>
+  <PageHeader
+    eyebrow="Workshop"
+    title={event.title}
+    size="md"
+    tone="mist"
+    image={event.image}
+    imageAlt={event.title}
+    imageRatio="16 / 10"
+  >
+    <ul class="chips" aria-label="When and where">
+      <li class="chip">{event.shortDate}</li>
+      <li class="chip">{event.venue}</li>
+    </ul>
+    <p class="status">{event.ticketsOnSale ? 'Tickets on sale' : 'Tickets are not on sale'}</p>
+    <Fragment slot="actions">
+      <a class="btn btn--outline" href="/">See other events</a>
+    </Fragment>
+  </PageHeader>
 
-    <div class="event__body">
-      <section aria-labelledby="time-title">
-        <h2 class="event__heading" id="time-title">Time &amp; Location</h2>
-        <p>{event.when}</p>
+  <section class="section section--cream" aria-label="Event details">
+    <div class="container details">
+      <div class="details__main">
+        <p class="eyebrow">Workshop details</p>
+        <h2 class="h2">About the event</h2>
+        <p class="details__about">{event.about}</p>
+      </div>
+
+      <aside class="details__card">
+        <h2 class="h4">Time &amp; Location</h2>
+        <p class="details__when">{event.when}</p>
         <p>{event.address}</p>
-      </section>
 
-      <section aria-labelledby="about-title">
-        <h2 class="event__heading" id="about-title">About the event</h2>
-        <p class="event__about">{event.about}</p>
-      </section>
-
-      <section aria-labelledby="share-title">
-        <h2 class="event__heading" id="share-title">Share this event</h2>
-        <ul class="event__share">
+        <h2 class="h4 details__share-title">Share this event</h2>
+        <ul class="share">
           <li>
             <a href={share.facebook} target="_blank" rel="noopener" aria-label="Share event on Facebook">
               <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"
@@ -102,145 +99,72 @@ const jsonLd = {
             </a>
           </li>
         </ul>
-      </section>
+      </aside>
     </div>
-  </article>
+  </section>
 </BaseLayout>
 
 <style>
-  .event__head {
-    position: relative;
-    background: linear-gradient(var(--mist) 0, var(--mist) calc(100% - 276px), var(--cream) calc(100% - 276px));
-    padding: 65px var(--gutter) 0;
-  }
-
-  .event__intro {
-    max-width: 843px;
-    margin-inline: auto;
-    text-align: center;
-  }
-
-  .event__title {
-    font-family: var(--font-serif);
+  .status {
+    margin-top: 18px;
+    font-size: var(--text-small);
     font-weight: 400;
-    font-size: clamp(34px, 22px + 2.6vw, 60px);
-    line-height: 1.2;
   }
 
-  .event__when {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 25px;
-    font-size: 18px;
-    line-height: 1.4;
-  }
-
-  .event__rule {
-    margin: 42px 0 41px;
-    border: 0;
-    border-top: 1px solid var(--hairline);
-  }
-
-  .event__status {
-    font-size: 16px;
-    line-height: 1.5;
-  }
-
-  .event__other {
-    font-size: 16px;
-    line-height: 1.5;
-  }
-
-  .event__image {
-    max-width: 979px;
-    margin: 60px auto 0;
-    background: var(--lime);
-  }
-
-  .event__image :global(img) {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 979 / 552;
-    object-fit: cover;
-  }
-
-  .event__body {
+  .details {
     display: grid;
-    gap: 60px;
-    max-width: 843px;
-    margin: 50px auto 0;
-    padding: 0 var(--gutter) 40px;
-    box-sizing: content-box;
-    font-size: 16px;
-    line-height: 1.5;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    align-items: start;
+    gap: clamp(36px, 6vw, 96px);
   }
 
-  .event__heading {
-    margin-bottom: 15px;
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 1.3;
-  }
-
-  .event__about {
+  .details__about {
+    max-width: 66ch;
+    margin-top: clamp(20px, 2.5vw, 28px);
     white-space: pre-line;
   }
 
-  .event__share {
+  .details__card {
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    background: var(--sage);
+  }
+
+  .details__when {
+    margin-top: 14px;
+    font-weight: 400;
+  }
+
+  .details__share-title {
+    margin-top: 32px;
+  }
+
+  .share {
     display: flex;
-    gap: 22px;
+    gap: 10px;
     list-style: none;
-    margin: 0;
+    margin: 14px 0 0;
     padding: 0;
   }
 
-  .event__share a {
+  .share a {
     display: grid;
     place-items: center;
-    width: 32px;
-    height: 32px;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: 50%;
     color: var(--olive);
-    transition: opacity 0.3s ease;
+    transition: background-color 0.3s ease;
   }
 
-  .event__share a:hover {
-    opacity: 0.7;
+  .share a:hover {
+    background: rgba(var(--olive-rgb), 0.08);
   }
 
-  @media (max-width: 767.98px) {
-    .event__head {
-      padding-top: calc(36 * var(--m));
-      background: linear-gradient(var(--mist) 0, var(--mist) calc(100% - 25vw), var(--cream) calc(100% - 25vw));
-    }
-
-    .event__title {
-      font-size: calc(32 * var(--m));
-    }
-
-    .event__when {
-      margin-top: calc(16 * var(--m));
-      font-size: calc(16 * var(--m));
-    }
-
-    .event__rule {
-      margin: calc(28 * var(--m)) 0;
-    }
-
-    .event__image {
-      margin-top: calc(36 * var(--m));
-      margin-inline: calc(-1 * var(--gutter));
-    }
-
-    .event__body {
-      gap: calc(40 * var(--m));
-      margin-top: calc(36 * var(--m));
-      font-size: calc(15 * var(--m));
-    }
-
-    .event__heading {
-      font-size: calc(24 * var(--m));
+  @media (max-width: 899.98px) {
+    .details {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

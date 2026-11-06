@@ -3,8 +3,9 @@
 The Amelia Peace Nutrition website ([ameliapeacenutrition.com](https://www.ameliapeacenutrition.com)),
 rebuilt from the original Wix site as a fast, fully responsive static site with [Astro](https://astro.build).
 
-Every page, image and piece of copy from the live site has been carried over, and the URLs are
-identical (`/about-5`, `/book-online`, `/service-page/...`), so existing links and search results keep working.
+Every page, image and piece of copy from the live site has been carried over into a refreshed, more modern
+design (same pastel colours), and the URLs are identical (`/about-5`, `/book-online`, `/service-page/...`), so
+existing links and search results keep working.
 
 ## Getting started
 
@@ -27,7 +28,11 @@ src/
   assets/images/          Every image from the Wix site (web-sized originals, metadata stripped)
   assets/images/hero/     Home page hero slides (see below)
   assets/instagram/       Drop Instagram post images here (see below)
-  components/             Header, Footer, Instagram feed, "Free phone consultation" section, ...
+  components/
+    HomeHero.astro        Full-screen home page hero (see below)
+    PageHeader.astro      Coloured opening block used by every inner page
+    BookingCta.astro      "Free phone consultation" block near the end of most pages
+    Header.astro, Footer.astro, InstagramFeed.astro, Arrow.astro, LeafMark.astro
   data/
     site.ts               Name, email, phone, social links, navigation, MailerLite account
     services.ts           The four bookable services (Book Online + /service-page/* pages)
@@ -35,11 +40,23 @@ src/
     instagram.ts          Instagram feed settings
   layouts/BaseLayout.astro  <head>, SEO tags, header + footer
   pages/                  One file per page; file names match the original URLs
-  styles/global.css       Colours, fonts, buttons
+  styles/global.css       Design system: colours, type scale, buttons, sections, cards
 ```
 
 Most text edits are made directly in the page files in `src/pages/`. Contact details, navigation and
 service prices live in `src/data/`.
+
+### Design system
+
+Pages are built from a small set of shared styles in `src/styles/global.css`, so the whole site stays
+consistent:
+
+- **Colour blocks:** `section section--cream | --sage | --lime | --mist` for full-width bands; deep olive
+  (`--ink`) is used for the footer and the hero overlay.
+- **Type:** `eyebrow` (small tracked label), `display` / `h2` / `h3` / `h4` (Forum headings), `lead`, `prose`.
+- **Buttons:** `btn` (lime), `btn btn--outline`, `btn btn--light` (on dark backgrounds), plus `btn--sm`,
+  `btn--lg` and `btn--block`.
+- **Pieces:** `card`, `chips` / `chip`, `ticks` (lime tick list), `rounded`, `container`, `split`.
 
 ### Home page hero
 
@@ -81,8 +98,7 @@ self-hosted, so the site makes no requests to Google.
 The Wix desktop site used fixed-width (980px+) layouts with elements wider than the screen (a 2500px hero,
 a 1511px footer heading, a full-bleed paragraph), which caused horizontal scrolling. This build has no
 fixed-width layouts: it was checked on every page at widths from 320px to 1920px with no horizontal overflow.
-Desktop matches the Wix desktop design, phones match the Wix mobile design (same section order and
-proportions), and tablets get an in-between layout.
+Layouts stack into a single column on phones, and the header switches to a menu button below 1240px.
 
 ## Deploying
 
@@ -96,11 +112,14 @@ Old Wix-only URLs (`/challenges`, `/single-project`, `/booking-calendar/*`) redi
 
 ## Differences from the Wix site
 
-Content and design are unchanged, apart from fixes to things that were broken on the original and one
-redesign:
+The content is unchanged; the design has been refreshed, and things that were broken on the original fixed:
 
-- The home page hero is new (see above). It replaces the 494px-tall animated banner. Its headline,
-  "Nutrition for women", was on the Wix site but hidden behind the animation.
+- New look across the site, built on the same pastel colours: full-screen home hero, Forum headings with small
+  tracked labels, rounded photos and cards, bigger lime buttons, a "Book a Free Call" button in the header and a
+  deep olive footer. Some sections have short headings or summaries drawn from the existing text (for example
+  the credentials on the About page).
+- The home hero replaces the 494px-tall animated banner. Its headline, "Nutrition for women", was on the Wix
+  site but hidden behind the animation.
 - No horizontal scrolling at any screen size (see above).
 - Placeholder contact details left over from the Wix template were replaced with the real ones: the
   "How I Work" email link pointed to `info@mysite.com`, its LinkedIn icon pointed to Wix's company page, and

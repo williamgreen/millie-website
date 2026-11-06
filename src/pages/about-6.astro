@@ -1,38 +1,53 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Arrow from '../components/Arrow.astro';
 import banner from '../assets/images/supper-club-table.jpg';
+
+const bookHref = '/service-page/diet-lifestyle-analysis';
+
+// Summary of the steps described in "What's Included".
+const steps = [
+  'A short questionnaire and a 7-day food diary before we speak',
+  'A one-off, personalised 45-minute consultation',
+  'Practical, realistic improvements tailored to you',
+  'Helpful handouts with recipes and ingredient ideas where needed',
+];
 ---
 
 <BaseLayout title="Diet & Lifestyle Analysis">
-  <div class="page">
-    <section class="head">
-      <h1 class="head__title">Diet &amp; Lifestyle Analysis</h1>
-      <div class="head__banner">
-        <Image
-          src={banner}
-          alt="Friends sharing a candlelit supper club meal"
-          widths={[480, 800, 1200, 1600]}
-          sizes="100vw"
-          loading="eager"
-        />
-      </div>
-    </section>
+  <PageHeader
+    eyebrow="A focused mini consultation"
+    title="Diet & Lifestyle Analysis"
+    image={banner}
+    imageAlt="Friends sharing a candlelit supper club meal"
+    imageRatio="1 / 1"
+  >
+    <p>Not ready for a full 1:1 programme yet, but want personalised feedback on your current eating habits?</p>
+    <Fragment slot="actions">
+      <a class="btn" href={bookHref}>Book Here <Arrow /></a>
+      <ul class="chips" aria-label="At a glance">
+        <li class="chip">£75 — one-time session</li>
+        <li class="chip">45-minute call</li>
+      </ul>
+    </Fragment>
+  </PageHeader>
 
-    <section class="detail">
-      <div class="detail__inner">
-        <h2 class="detail__lead">
-          Not ready for a full 1:1 programme yet, but want personalised feedback on your current eating habits?
-        </h2>
-        <div class="detail__text rich">
-          <h3>What’s Included:</h3>
+  <section class="section section--cream" aria-labelledby="included-title">
+    <div class="container included">
+      <div class="included__text">
+        <p class="eyebrow">The consultation</p>
+        <h2 class="h2" id="included-title">What’s included</h2>
+        <div class="prose included__prose">
+          <p class="lead">
+            The Diet &amp; Lifestyle Analysis is a focused mini consultation designed to help you understand how your
+            food choices, energy levels, and daily routines are either supporting your wellbeing or quietly holding you
+            back.
+          </p>
           <p>
-            The Diet &amp; Lifestyle Analysis is a focused mini consultation designed to help you understand how your food
-            choices, energy levels, and daily routines are either supporting your wellbeing or quietly holding you back.
             It’s an opportunity to step back, gain clarity, and identify simple, realistic adjustments that can make a
             meaningful difference to how you feel day to day.
           </p>
-          <p></p>
           <p>
             You’ll receive a one-off personalised consultation where we’ll chat through your current cooking and eating
             habits in a supportive, non-judgemental way. Before our 45-minute call, you’ll complete a short questionnaire
@@ -40,138 +55,137 @@ import banner from '../assets/images/supper-club-table.jpg';
             our session, we’ll discuss practical, realistic improvements tailored to you, and I’ll provide helpful
             handouts with recipes and ingredient ideas where needed to support you moving forward.
           </p>
-          <p></p>
-          <p></p>
-          <p>Perfect For anyone who would like clarity and direction before investing in a full plan</p>
-          <p class="small"></p>
-          <h3>Investment:</h3>
-          <p class="price">£75 — one-time session</p>
         </div>
-        <a class="btn" href="/book-online">Book Here</a>
       </div>
-    </section>
-  </div>
+      <aside class="card card--flat included__steps" aria-labelledby="steps-title">
+        <h3 class="h4" id="steps-title">How it works</h3>
+        <ol class="steps">
+          {
+            steps.map((step, i) => (
+              <li>
+                <span class="steps__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span>{step}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--tight section--lime" aria-labelledby="perfect-title">
+    <div class="container--narrow perfect">
+      <p class="eyebrow perfect__eyebrow" id="perfect-title">Perfect for</p>
+      <p class="perfect__text">Anyone who would like clarity and direction before investing in a full plan</p>
+    </div>
+  </section>
+
+  <section class="section section--sage" aria-labelledby="investment-title">
+    <div class="container">
+      <div class="investment">
+        <div>
+          <p class="eyebrow">Investment</p>
+          <h2 class="h2" id="investment-title">A one-off, personalised consultation</h2>
+        </div>
+        <div class="investment__card">
+          <p class="investment__price"><span>£75</span> — one-time session</p>
+          <div class="btn-row">
+            <a class="btn" href={bookHref}>Book Here <Arrow /></a>
+            <a class="btn btn--outline" href="/general-1">See 1:1 packages</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .page {
+  /* What's included */
+  .included {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    align-items: start;
+    gap: clamp(36px, 6vw, 96px);
+  }
+
+  .included__prose {
+    margin-top: clamp(20px, 2.5vw, 28px);
+  }
+
+  .included__steps {
     background: var(--sage);
   }
 
-  /* ---------- Title + banner ---------- */
-  .head {
-    padding-top: 70px;
-    padding-bottom: 10px;
+  .steps {
+    display: grid;
+    gap: 18px;
+    list-style: none;
+    margin: 22px 0 0;
+    padding: 0;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 10px;
+    padding-top: 18px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .steps__num {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    line-height: 1.2;
+    color: var(--olive-soft);
+  }
+
+  /* Perfect for */
+  .perfect {
     text-align: center;
   }
 
-  .head__title {
-    padding-inline: var(--gutter);
-    font-size: clamp(34px, 20px + 2.6vw, 56px);
-    line-height: 1.18;
+  .perfect__eyebrow {
+    color: var(--olive);
   }
 
-  .head__banner {
-    height: clamp(220px, 24.4vw, 352px);
-    margin-top: 59px;
-    overflow: hidden;
-  }
-
-  .head__banner :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* ---------- Details ---------- */
-  .detail {
-    padding: 61px var(--gutter) 20px;
-  }
-
-  .detail__inner {
-    max-width: 900px;
-    margin-inline: auto;
-  }
-
-  .detail__lead {
-    font-size: clamp(28px, 22px + 0.95vw, 38px);
+  .perfect__text {
+    font-family: var(--font-serif);
+    font-size: var(--text-h3);
     line-height: 1.2;
+    text-wrap: balance;
   }
 
-  .detail__text {
-    max-width: 868px;
-    margin-top: 64px;
-    padding-left: 7px;
-    font-size: 22px;
-    line-height: 1.4;
+  /* Investment */
+  .investment {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(28px, 5vw, 80px);
   }
 
-  .detail__text h3 {
-    font-size: clamp(28px, 22px + 0.95vw, 38px);
-    line-height: 1.4;
+  .investment__card {
+    padding: clamp(28px, 4vw, 48px);
+    border-radius: var(--radius-lg);
+    background: var(--cream);
   }
 
-  .detail__text .small {
-    font-size: 16px;
+  .investment__price {
+    margin-bottom: 28px;
+    font-size: var(--text-lead);
   }
 
-  .detail__text .price {
-    font-size: 20px;
+  .investment__price span {
+    font-family: var(--font-serif);
+    font-size: clamp(56px, 40px + 3vw, 88px);
+    line-height: 1;
   }
 
-  .detail .btn {
-    margin: 32px 0 0 27px;
-  }
-
-  /* ---------- Mobile ---------- */
-  @media (max-width: 767.98px) {
-    .head {
-      padding-top: calc(20 * var(--m));
-      padding-bottom: calc(3 * var(--m));
-    }
-
-    .head__title {
-      font-size: calc(27 * var(--m));
-      max-width: calc(220 * var(--m));
-      margin-inline: auto;
-      padding-inline: 0;
-    }
-
-    .head__banner {
-      height: calc(186 * var(--m));
-      margin-top: calc(20 * var(--m));
-    }
-
-    .detail {
-      padding: calc(45 * var(--m)) calc(20 * var(--m)) calc(52 * var(--m));
-    }
-
-    .detail__lead {
-      font-size: calc(24 * var(--m));
-    }
-
-    .detail__text {
-      margin-top: calc(37 * var(--m));
-      padding-left: 0;
-      font-size: calc(19 * var(--m));
-    }
-
-    .detail__text h3 {
-      font-size: calc(26 * var(--m));
-    }
-
-    .detail__text .small {
-      font-size: calc(14 * var(--m));
-    }
-
-    .detail__text .price {
-      font-size: calc(17 * var(--m));
-    }
-
-    .detail .btn {
-      display: flex;
-      width: fit-content;
-      margin: calc(34 * var(--m)) auto 0;
+  @media (max-width: 899.98px) {
+    .included,
+    .investment {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

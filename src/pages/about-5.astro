@@ -1,229 +1,246 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ConsultSplit from '../components/ConsultSplit.astro';
+import PageHeader from '../components/PageHeader.astro';
+import BookingCta from '../components/BookingCta.astro';
+import Arrow from '../components/Arrow.astro';
 import { site } from '../data/site';
 import portrait from '../assets/images/amelia-portrait.jpg';
+import portraitDark from '../assets/images/amelia-portrait-black-top.jpg';
 import linkedinIcon from '../assets/images/social-linkedin.png';
 import instagramIcon from '../assets/images/social-instagram.png';
+
+// Highlights pulled from "My Story" below.
+const credentials = [
+  { figure: '3 years', text: 'Studied at the College of Naturopathic Medicine (CNM) in Bristol' },
+  { figure: '200+ hours', text: 'Of clinical experience, alongside a diploma in Nutritional Therapy' },
+  { figure: 'ANP', text: 'Full member of the Association of Naturopathic Practitioners' },
+  { figure: 'CNHC', text: 'Member of the Complementary & Natural Healthcare Council' },
+];
 ---
 
 <BaseLayout title="About">
-  <section class="intro" aria-labelledby="about-title">
-    <h1 class="visually-hidden" id="about-title">About</h1>
-    <div class="intro__inner">
-      <div class="intro__media">
-        <Image
-          src={portrait}
-          alt="Amelia Peace smiling, wearing a green jumper"
-          widths={[320, 480, 640, 916]}
-          sizes="(min-width: 768px) 458px, calc(100vw - 40px)"
-          loading="eager"
-        />
+  <PageHeader
+    eyebrow="About"
+    title="I am Amelia"
+    image={portrait}
+    imageAlt="Amelia Peace smiling, wearing a green jumper"
+    imagePosition="50% 30%"
+  >
+    <p>I'm a registered Naturopathic Nutritional Therapist - empowering women’s health through nutrition.</p>
+    <Fragment slot="actions">
+      <a class="btn" href="/service-page/free-phone-consultation-1">Book a Free Call <Arrow /></a>
+      <ul class="social" aria-label="Social links">
+        <li>
+          <a href={site.linkedin} target="_blank" rel="noopener">
+            <Image src={linkedinIcon} alt="LinkedIn" width={22} height={22} densities={[1, 2, 3]} />
+          </a>
+        </li>
+        <li>
+          <a href={site.instagram.url} target="_blank" rel="noopener">
+            <Image src={instagramIcon} alt="Instagram" width={22} height={22} densities={[1, 2, 3]} />
+          </a>
+        </li>
+      </ul>
+    </Fragment>
+  </PageHeader>
+
+  <section class="section section--cream" aria-labelledby="approach-title">
+    <div class="container approach">
+      <div>
+        <p class="eyebrow">My approach</p>
+        <h2 class="h2" id="approach-title">A holistic approach to women’s health</h2>
       </div>
-      <div class="intro__body">
-        <div class="intro__text rich">
-          <p>
-            I am Amelia, I'm a registered Naturopathic Nutritional Therapist - empowering women’s health through
-            nutrition.
-          </p>
-          <p></p>
-          <p>
-            I prioritise the unique needs of women in all stages of life, from adolescence to menopause and beyond. I
-            believe in a holistic approach to health, focusing not only on physical well-being but also on emotional and
-            mental health. I use evidence-based nutritional science to get to the root cause of your health symptoms,
-            both short and long term.
-          </p>
-          <p></p>
-          <p>I see clients online through zoom as well as 1:1 in Bristol, where I'm based.</p>
-        </div>
-        <ul class="social" aria-label="Social links">
-          <li>
-            <a href={site.linkedin} target="_blank" rel="noopener">
-              <Image src={linkedinIcon} alt="LinkedIn" width={24} height={24} densities={[1, 2, 3]} />
-            </a>
-          </li>
-          <li>
-            <a href={site.instagram.url} target="_blank" rel="noopener">
-              <Image src={instagramIcon} alt="Instagram" width={24} height={24} densities={[1, 2, 3]} />
-            </a>
-          </li>
+      <div class="approach__text">
+        <p class="lead">
+          I prioritise the unique needs of women in all stages of life, from adolescence to menopause and beyond.
+        </p>
+        <p>
+          I believe in a holistic approach to health, focusing not only on physical well-being but also on emotional and
+          mental health. I use evidence-based nutritional science to get to the root cause of your health symptoms, both
+          short and long term.
+        </p>
+        <p>I see clients online through zoom as well as 1:1 in Bristol, where I'm based.</p>
+        <ul class="chips" aria-label="Where I see clients">
+          <li class="chip">Online via Zoom</li>
+          <li class="chip">1:1 in Bristol</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <section class="story" aria-labelledby="story-title">
-    <div class="story__inner">
-      <h2 class="story__title" id="story-title">My Story</h2>
-      <div class="story__text rich">
-        <p>
+  <section class="section section--mist" aria-labelledby="story-title">
+    <div class="container story">
+      <div class="story__head">
+        <p class="eyebrow">Background</p>
+        <h2 class="h2" id="story-title">My Story</h2>
+      </div>
+      <div class="prose story__text">
+        <p class="lead">
           My interest in women's health was ignited by the understanding of the unique challenges women face throughout
-          their lives. My journey into this field began with a commitment to empower women to take control of their
-          well-being. Over the years, I've witnessed the transformative power of personalised care and education, and it
-          has become the cornerstone of my practice.
+          their lives.
         </p>
-        <p></p>
+        <p>
+          My journey into this field began with a commitment to empower women to take control of their well-being. Over
+          the years, I've witnessed the transformative power of personalised care and education, and it has become the
+          cornerstone of my practice.
+        </p>
         <p>
           I studied for three years at the renowned College of Naturopathic medicine (CNM) in Bristol and qualified as a
           registered nutritionist with a diploma in Nutritional Therapy; completing a foundation year in Biomedicine and
           Human Sciences alongside over 200 hours of clinical experience.
         </p>
-        <p></p>
         <p>
-          I am a full member of the Association of Naturopathic Practitioners and am required to attend undergraduate
-          and postgraduate training on an ongoing basis — maintaining my knowledge and continually growing my passion for
+          I am a full member of the Association of Naturopathic Practitioners and am required to attend undergraduate and
+          postgraduate training on an ongoing basis — maintaining my knowledge and continually growing my passion for
           nutritional therapy. As well as this I am also a member of the Complementary &amp; Natural Healthcare Council
           (CNHC). My practice is insured through Balens.
         </p>
-        <p></p>
         <p>
-          Within my practice I use nutrition to promote the body's own self-healing mechanisms. Food is meant to be
-          enjoyed and I want to help you get to a place where the food you love, loves you back. We’ll work together to
-          get to the root of your symptoms and help you not only to feel better, but to achieve the best possible
-          physical, emotional and mental state.
+          Within my practice I use nutrition to promote the body's own self-healing mechanisms. Food is meant to be enjoyed
+          and I want to help you get to a place where the food you love, loves you back. We’ll work together to get to the
+          root of your symptoms and help you not only to feel better, but to achieve the best possible physical, emotional
+          and mental state.
         </p>
-        <p></p>
         <p>I offer a food first approach, with supplements and lifestyle recommendations where necessary.</p>
       </div>
     </div>
   </section>
 
-  <ConsultSplit size="md" />
+  <section class="section section--cream" aria-labelledby="credentials-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Training &amp; registration</p>
+        <h2 class="h2" id="credentials-title">Qualified, registered and insured</h2>
+      </div>
+      <ul class="credentials">
+        {
+          credentials.map((item) => (
+            <li class="credentials__item">
+              <span class="credentials__figure">{item.figure}</span>
+              <span class="credentials__text">{item.text}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <BookingCta
+    tone="lime"
+    image={portraitDark}
+    imageAlt="Amelia Peace in a black top, smiling"
+    imagePosition="50% 25%"
+  />
 </BaseLayout>
 
 <style>
-  /* ---------- Intro ---------- */
-  .intro {
-    background: var(--sage);
-    padding: 45px var(--gutter) 10px;
-  }
-
-  .intro__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 458px) minmax(0, 592px);
-    justify-content: center;
-    gap: 41px;
-  }
-
-  .intro__media :global(img) {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 458 / 476;
-    object-fit: cover;
-  }
-
-  .intro__body {
-    padding-top: 11px;
-  }
-
-  .intro__text {
-    font-size: 20px;
-    line-height: 1.2;
-  }
-
+  /* Social icons next to the header button */
   .social {
     display: flex;
-    gap: 7px;
+    gap: 6px;
     list-style: none;
-    margin: 42px 0 0;
+    margin: 0 0 0 6px;
     padding: 0;
   }
 
   .social a {
-    display: block;
-    transition: opacity 0.3s ease;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
   }
 
   .social a:hover {
-    opacity: 0.7;
+    background: rgba(var(--olive-rgb), 0.08);
   }
 
   .social :global(img) {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
-  /* ---------- My Story ---------- */
-  .story {
-    padding: 68px var(--gutter) 40px;
+  /* My approach */
+  .approach {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 6vw, 96px);
   }
 
-  .story__inner {
-    max-width: 980px;
-    margin-inline: auto;
+  .approach__text > * + * {
+    margin-top: 1em;
   }
 
-  .story__title {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: 38px;
-    line-height: 1.1;
-  }
-
-  .story__text {
+  .approach__text .chips {
     margin-top: 28px;
-    font-size: 20px;
-    line-height: 1.2;
   }
 
-  /* ---------- Tablet ---------- */
+  /* My story */
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: clamp(32px, 6vw, 96px);
+  }
+
+  .story__head {
+    align-self: start;
+    position: sticky;
+    top: 32px;
+  }
+
+  /* Credentials */
+  .credentials {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 24px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .credentials__item {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    background: var(--sage);
+  }
+
+  .credentials__figure {
+    font-family: var(--font-serif);
+    font-size: clamp(34px, 26px + 1.6vw, 52px);
+    line-height: 1;
+  }
+
+  .credentials__text {
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
   @media (max-width: 1023.98px) {
-    .intro {
-      padding-top: 40px;
-      padding-bottom: 40px;
-    }
-
-    .intro__inner {
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
-      gap: 32px;
+    .credentials {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  /* ---------- Mobile ---------- */
-  @media (max-width: 767.98px) {
-    .intro {
-      padding: 0 calc(20 * var(--m)) calc(20 * var(--m));
-    }
-
-    .intro__inner {
-      grid-template-columns: 1fr;
-      gap: calc(20 * var(--m));
-    }
-
-    .intro__media :global(img) {
-      aspect-ratio: 280 / 291;
-    }
-
-    .intro__body {
-      padding-top: 0;
-    }
-
-    .intro__text {
-      font-size: calc(20 * var(--m));
-    }
-
-    .social {
-      justify-content: center;
-      margin-top: calc(60 * var(--m));
-    }
-
-    .social :global(img) {
-      width: calc(24 * var(--m));
-      height: calc(24 * var(--m));
-    }
-
+  @media (max-width: 899.98px) {
+    .approach,
     .story {
-      padding: calc(47 * var(--m)) calc(20 * var(--m)) calc(40 * var(--m));
+      grid-template-columns: minmax(0, 1fr);
     }
 
-    .story__title {
-      font-size: calc(30 * var(--m));
+    .story__head {
+      position: static;
     }
+  }
 
-    .story__text {
-      margin-top: calc(20 * var(--m));
-      font-size: calc(20 * var(--m));
+  @media (max-width: 479.98px) {
+    .credentials {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

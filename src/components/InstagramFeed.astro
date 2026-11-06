@@ -1,15 +1,21 @@
 ---
 import { Image } from 'astro:assets';
+import Arrow from './Arrow.astro';
 import { site } from '../data/site';
 import { instagramPosts } from '../data/instagram';
 
 const hasPosts = instagramPosts.length > 0;
 ---
 
-<section class="ig" aria-labelledby="ig-title">
-  <h2 class="ig__title" id="ig-title">
-    <a href={site.instagram.url} target="_blank" rel="noopener">Follow me {site.instagram.handle}</a>
-  </h2>
+<section class="section section--mist ig" aria-labelledby="ig-title">
+  <div class="container">
+    <div class="section-head section-head--center ig__head">
+      <p class="eyebrow">Instagram</p>
+      <h2 class="h2" id="ig-title">
+        <a href={site.instagram.url} target="_blank" rel="noopener">Follow me {site.instagram.handle}</a>
+      </h2>
+    </div>
+  </div>
 
   {
     hasPosts && (
@@ -22,31 +28,35 @@ const hasPosts = instagramPosts.length > 0;
                   src={post.image}
                   alt={post.alt}
                   widths={[320, 500, 750, 1000]}
-                  sizes="(min-width: 1024px) 33vw, (min-width: 600px) 45vw, 80vw"
-                  loading={i < 3 ? 'eager' : 'lazy'}
+                  sizes="(min-width: 1024px) 25vw, (min-width: 600px) 40vw, 75vw"
+                  loading={i < 4 ? 'eager' : 'lazy'}
                 />
               </a>
             </li>
           ))}
         </ul>
-        <button class="ig__arrow ig__arrow--prev" type="button" data-ig-prev hidden>
-          <span class="visually-hidden">Previous posts</span>
-          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-            <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.5" fill="none" />
-          </svg>
-        </button>
-        <button class="ig__arrow ig__arrow--next" type="button" data-ig-next hidden>
-          <span class="visually-hidden">Next posts</span>
-          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-            <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" fill="none" />
-          </svg>
-        </button>
+        <div class="ig__controls">
+          <button class="ig__arrow" type="button" data-ig-prev disabled>
+            <span class="visually-hidden">Previous posts</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.6" fill="none" />
+            </svg>
+          </button>
+          <button class="ig__arrow" type="button" data-ig-next>
+            <span class="visually-hidden">Next posts</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" fill="none" />
+            </svg>
+          </button>
+        </div>
       </div>
     )
   }
 
   <div class="ig__more">
-    <a class="btn-outline" href={site.instagram.url} target="_blank" rel="noopener">View on Instagram</a>
+    <a class="btn btn--outline" href={site.instagram.url} target="_blank" rel="noopener">
+      View on Instagram <Arrow />
+    </a>
   </div>
 </section>
 
@@ -57,11 +67,11 @@ const hasPosts = instagramPosts.length > 0;
     const next = slider.querySelector<HTMLButtonElement>('[data-ig-next]');
     if (!track || !prev || !next) return;
 
-    const step = () => (track.querySelector<HTMLElement>('.ig__item')?.offsetWidth ?? track.clientWidth) + 2;
+    const step = () => (track.querySelector<HTMLElement>('.ig__item')?.offsetWidth ?? track.clientWidth) + 16;
     const update = () => {
       const max = track.scrollWidth - track.clientWidth - 2;
-      prev.hidden = track.scrollLeft <= 2;
-      next.hidden = track.scrollLeft >= max;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max;
     };
     prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
     next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
@@ -72,42 +82,36 @@ const hasPosts = instagramPosts.length > 0;
 </script>
 
 <style>
-  .ig {
-    background: var(--lime);
-    padding: 61px 0 96px;
+  .ig__head {
+    margin-bottom: 0;
   }
 
-  .ig__title {
-    width: min(100% - 2 * var(--gutter), 1100px);
-    margin-inline: auto;
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: clamp(46px, 27px + 5.2vw, 96px);
-    line-height: 1.4;
-    text-align: center;
-  }
-
-  .ig__title a {
+  .ig__head a {
     text-decoration: none;
   }
 
+  .ig__head a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
   .ig__slider {
-    position: relative;
-    margin-top: 64px;
+    margin-top: clamp(40px, 5vw, 64px);
   }
 
   .ig__track {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% - 4px) / 3);
-    gap: 2px;
+    grid-auto-columns: calc((100% - 3 * 16px - 2 * var(--gutter)) / 4);
+    gap: 16px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 var(--gutter);
   }
 
   .ig__track::-webkit-scrollbar {
@@ -122,80 +126,66 @@ const hasPosts = instagramPosts.length > 0;
     display: block;
     aspect-ratio: 1;
     overflow: hidden;
+    border-radius: var(--radius);
   }
 
-  .ig__item img {
+  .ig__item :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s ease;
   }
 
-  .ig__item a:hover img {
-    transform: scale(1.03);
+  .ig__item a:hover :global(img) {
+    transform: scale(1.04);
+  }
+
+  .ig__controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
   }
 
   .ig__arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     display: grid;
     place-items: center;
-    width: 50px;
-    height: 50px;
+    width: 46px;
+    height: 46px;
     padding: 0;
-    border: 0;
+    border: 1px solid var(--olive);
     border-radius: 50%;
-    background: rgba(255, 253, 246, 0.85);
+    background: transparent;
     color: var(--olive);
     cursor: pointer;
+    transition: background-color 0.3s ease;
   }
 
-  .ig__arrow[hidden] {
-    display: none;
+  .ig__arrow:hover:not(:disabled) {
+    background: rgba(var(--olive-rgb), 0.08);
   }
 
-  .ig__arrow--prev {
-    left: 20px;
-  }
-
-  .ig__arrow--next {
-    right: 20px;
+  .ig__arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
   }
 
   .ig__more {
     display: flex;
     justify-content: center;
-    margin-top: 56px;
+    margin-top: clamp(32px, 4vw, 48px);
+    padding-inline: var(--gutter);
   }
 
   @media (max-width: 1023.98px) {
     .ig__track {
-      grid-auto-columns: calc((100% - 2px) / 2);
-    }
-  }
-
-  @media (max-width: 767.98px) {
-    .ig {
-      padding: calc(33 * var(--m)) 0 calc(72 * var(--m));
-    }
-
-    .ig__title {
-      font-size: calc(49 * var(--m));
-    }
-
-    .ig__slider {
-      margin-top: calc(32 * var(--m));
-    }
-
-    .ig__more {
-      margin-top: calc(40 * var(--m));
+      grid-auto-columns: calc((100% - 16px - 2 * var(--gutter)) / 2.3);
     }
   }
 
   @media (max-width: 599.98px) {
     .ig__track {
-      grid-auto-columns: 82%;
+      grid-auto-columns: 72%;
     }
   }
 </style>

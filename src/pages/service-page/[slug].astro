@@ -1,6 +1,8 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Arrow from '../../components/Arrow.astro';
 import { site } from '../../data/site';
 import { services, spokenDuration, type Service } from '../../data/services';
 
@@ -12,140 +14,164 @@ interface Props {
 }
 
 const { service } = Astro.props;
+// The Diet & Lifestyle Analysis has its own page with the full description.
+const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undefined;
 ---
 
 <BaseLayout title={service.name} description={service.description} image={service.image}>
-  <article class="service">
-    <header class="service__head">
-      <h1 class="service__title">{service.name}</h1>
-      <p class="service__tagline">{service.tagline}</p>
-      <ul class="service__details" aria-label="Details">
-        <li aria-label={spokenDuration(service.duration)}>{service.duration}</li>
-        {service.price && <li>{service.price}</li>}
-        <li>{site.address.venue}</li>
-      </ul>
-      <a class="btn-book service__book" href={service.bookingUrl}>Book Now</a>
-    </header>
+  <PageHeader
+    eyebrow={service.tagline}
+    title={service.name}
+    size="md"
+    image={service.image}
+    imageAlt={service.imageAlt}
+    imageRatio="4 / 3"
+  >
+    <ul class="chips" aria-label="Details">
+      <li class="chip" aria-label={spokenDuration(service.duration)}>{service.duration}</li>
+      <li class="chip">{service.price ?? 'Free'}</li>
+      <li class="chip">{site.address.venue}</li>
+    </ul>
+    <Fragment slot="actions">
+      <a class="btn" href={service.bookingUrl}>Book Now <Arrow /></a>
+      <a class="btn btn--outline" href="/book-online">All services</a>
+    </Fragment>
+  </PageHeader>
 
-    {
-      service.description && (
-        <section class="service__section" aria-labelledby="description-title">
-          <h2 class="service__heading" id="description-title">
-            Service Description
-          </h2>
-          <p class="service__description">{service.description}</p>
-        </section>
-      )
-    }
+  <section class="section section--cream" aria-label="Service details">
+    <div class="container details">
+      <div class="details__main">
+        {
+          service.description ? (
+            <>
+              <p class="eyebrow">About this service</p>
+              <h2 class="h2">Service Description</h2>
+              <p class="details__description">{service.description}</p>
+            </>
+          ) : (
+            <>
+              <p class="eyebrow">About this service</p>
+              <h2 class="h2">{service.tagline}</h2>
+              {moreInfo && (
+                <a class="btn btn--outline details__more" href={moreInfo}>
+                  Read the full details <Arrow />
+                </a>
+              )}
+            </>
+          )
+        }
+      </div>
 
-    <section class="service__section" aria-labelledby="contact-title">
-      <h2 class="service__heading" id="contact-title">Contact Details</h2>
-      <p>{site.address.full}</p>
-      <p><a href={`tel:+44${site.phone.slice(1)}`}>{site.phone}</a></p>
-      <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
-    </section>
-  </article>
+      <aside class="details__card" aria-labelledby="summary-title">
+        <h2 class="h4" id="summary-title">At a glance</h2>
+        <dl class="summary">
+          <div>
+            <dt>Duration</dt>
+            <dd aria-label={spokenDuration(service.duration)}>{service.duration}</dd>
+          </div>
+          <div>
+            <dt>Price</dt>
+            <dd>{service.price ?? 'Free'}</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>{site.address.full}</dd>
+          </div>
+        </dl>
+        <a class="btn btn--block" href={service.bookingUrl}>Book Now <Arrow /></a>
+
+        <h2 class="h4 details__contact-title">Contact Details</h2>
+        <ul class="details__contact">
+          <li>{site.address.full}</li>
+          <li><a href={`tel:+44${site.phone.slice(1)}`}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .service {
-    width: min(100% - 2 * var(--gutter), 720px);
-    margin: 0 auto;
-    padding: 72px 0 40px;
-    font-size: 16px;
-    line-height: 1.5;
+  .details {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    align-items: start;
+    gap: clamp(36px, 6vw, 96px);
   }
 
-  .service__title {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: 40px;
-    line-height: 1.4;
-  }
-
-  .service__tagline {
-    margin-top: 16px;
-  }
-
-  .service__details {
-    display: inline-flex;
-    flex-wrap: wrap;
-    list-style: none;
-    margin: 32px 0 0;
-    padding: 0;
-    border: 1px solid var(--hairline);
-  }
-
-  .service__details li {
-    padding: 16px 16px;
-  }
-
-  .service__details li + li {
-    border-left: 1px solid var(--hairline);
-  }
-
-  .service__head {
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  .service__book {
-    display: flex;
-    width: fit-content;
-    min-width: 132px;
-    margin-top: 32px;
-  }
-
-  .service__section {
-    padding: 32px 0;
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  .service__heading {
-    margin-bottom: 16px;
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 1.4;
-  }
-
-  .service__description {
+  .details__description {
+    max-width: 66ch;
+    margin-top: clamp(20px, 2.5vw, 28px);
     white-space: pre-line;
   }
 
-  .service__section a {
-    text-decoration: none;
+  .details__more {
+    margin-top: 28px;
   }
 
-  .service__section a:hover {
+  .details__card {
+    position: sticky;
+    top: 32px;
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    background: var(--sage);
+  }
+
+  .summary {
+    display: grid;
+    gap: 14px;
+    margin: 20px 0 28px;
+  }
+
+  .summary div {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .summary dt {
+    font-weight: 400;
+    font-size: var(--text-small);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--olive-soft);
+  }
+
+  .summary dd {
+    margin: 0;
+  }
+
+  .details__contact-title {
+    margin-top: 32px;
+  }
+
+  .details__contact {
+    display: grid;
+    gap: 6px;
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    font-size: var(--text-small);
+  }
+
+  .details__contact a {
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .details__contact a:hover {
     text-decoration: underline;
   }
 
-  @media (max-width: 767.98px) {
-    .service {
-      padding-top: calc(36 * var(--m));
-      font-size: calc(15 * var(--m));
+  @media (max-width: 899.98px) {
+    .details {
+      grid-template-columns: minmax(0, 1fr);
     }
 
-    .service__title {
-      font-size: calc(32 * var(--m));
-      line-height: 1.3;
-    }
-
-    .service__tagline {
-      margin-top: calc(14 * var(--m));
-    }
-
-    .service__details {
-      margin-top: calc(28 * var(--m));
-    }
-
-    .service__details li {
-      padding: calc(14 * var(--m)) calc(16 * var(--m));
-    }
-
-    .service__heading {
-      font-size: calc(20 * var(--m));
+    .details__card {
+      position: static;
     }
   }
 </style>

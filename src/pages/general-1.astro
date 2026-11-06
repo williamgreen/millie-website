@@ -1,231 +1,221 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import BookingCta from '../components/BookingCta.astro';
+import Arrow from '../components/Arrow.astro';
 import supperClub from '../assets/images/supper-club.jpg';
 import garden from '../assets/images/amelia-garden.jpg';
+import tomatoes from '../assets/images/service-transformation.jpg';
+import clementines from '../assets/images/service-3-month-foundation.jpg';
+
+const packages = [
+  {
+    id: 'foundation',
+    name: '3 Month Foundation Package',
+    price: '£350',
+    intro: 'Individuals looking to establish healthy habits and gain clarity on their nutritional needs.',
+    features: [
+      'Initial Consultation: 90 minutes',
+      'Follow-Up Sessions: 2 x 45 minutes',
+      'Duration: 3 Months',
+      'Support: Email access between sessions',
+    ],
+    outro:
+      'This package provides foundational support and guidance, helping you make sustainable improvements in your diet and lifestyle.',
+    image: supperClub,
+    imageAlt: 'Guests seated along a long table at a candlelit supper club',
+    imagePosition: '50% 55%',
+    href: '/service-page/3-month-foundation-package',
+  },
+  {
+    id: 'transformation',
+    name: 'Transformation Package',
+    price: '£500',
+    intro: 'Ideal for: Clients seeking more comprehensive support to address specific health goals or challenges.',
+    features: [
+      'Initial Consultation: 90 minutes',
+      'Follow-Up Sessions: 4 x 45 minutes',
+      'Duration: Approximately 5',
+      'Support: Email and messaging support during clinic hours',
+    ],
+    outro:
+      'This package offers more in-depth support, allowing for personalised strategies and adjustments over a longer period to achieve meaningful health changes.',
+    image: garden,
+    imageAlt: 'Amelia standing in front of a red Japanese maple',
+    imagePosition: '50% 30%',
+    href: '/service-page/transformation-package',
+  },
+];
 ---
 
 <BaseLayout title="1:1 Serives">
-  <section class="intro">
-    <h1 class="intro__title">Packages</h1>
-    <p class="intro__text">
+  <PageHeader eyebrow="1:1 services" title="Packages">
+    <p>
       Rather than a 'one size fits all approach' I consider each individual to be unique and recommend personalised
       nutrition and lifestyle programmes to best help your symptoms.
     </p>
+  </PageHeader>
+
+  <section class="section section--cream" aria-label="Packages">
+    <div class="container packages">
+      {
+        packages.map((pkg) => (
+          <article class="package" aria-labelledby={`pkg-${pkg.id}`}>
+            <div class="package__media">
+              <Image
+                src={pkg.image}
+                alt={pkg.imageAlt}
+                widths={[480, 720, 960, 1280]}
+                sizes="(min-width: 900px) 46vw, 100vw"
+                class="media-cover"
+                style={`object-position: ${pkg.imagePosition}`}
+              />
+            </div>
+            <div class="package__body">
+              <h2 class="h3" id={`pkg-${pkg.id}`}>
+                {pkg.name}
+              </h2>
+              <p class="package__price">
+                <span>{pkg.price}</span>
+              </p>
+              <p class="package__intro">{pkg.intro}</p>
+              <ul class="ticks package__features">
+                {pkg.features.map((feature) => (
+                  <li>{feature}</li>
+                ))}
+              </ul>
+              <p class="package__outro">{pkg.outro}</p>
+              <div class="btn-row package__actions">
+                <a class="btn" href={pkg.href}>
+                  Book Here <Arrow />
+                </a>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="container mini">
+      <div class="mini__card">
+        <div class="mini__media">
+          <Image
+            src={tomatoes}
+            alt="Crates of red tomatoes at a market"
+            widths={[320, 480, 640]}
+            sizes="(min-width: 900px) 220px, 100vw"
+            class="media-cover"
+          />
+        </div>
+        <div class="mini__text">
+          <p class="eyebrow">Not ready for a full programme?</p>
+          <h2 class="h3">Diet &amp; Lifestyle Analysis</h2>
+          <p>A focused mini consultation — £75, one-time session.</p>
+        </div>
+        <a class="btn btn--outline mini__cta" href="/about-6">Find out more <Arrow /></a>
+      </div>
+    </div>
   </section>
 
-  <section class="pkg" aria-labelledby="pkg-foundation">
-    <div class="pkg__media">
-      <Image
-        src={supperClub}
-        alt="Guests seated along a long table at a candlelit supper club"
-        widths={[480, 720, 960, 1440]}
-        sizes="(min-width: 768px) 50vw, 100vw"
-        loading="eager"
-      />
-    </div>
-    <div class="pkg__body">
-      <h2 class="pkg__title" id="pkg-foundation"><a href="/book-online">3 Month Foundation Package</a></h2>
-      <div class="pkg__text rich">
-        <p>Individuals looking to establish healthy habits and gain clarity on their nutritional needs.</p>
-        <p></p>
-        <ul>
-          <li>Initial Consultation: 90 minutes</li>
-          <li>Follow-Up Sessions: 2 x 45 minutes</li>
-          <li>Duration: 3 Months</li>
-          <li>Support: Email access between sessions</li>
-          <li>Cost: £350</li>
-        </ul>
-        <p></p>
-        <p></p>
-        <p>
-          This package provides foundational support and guidance, helping you make sustainable improvements in your
-          diet and lifestyle.
-        </p>
-      </div>
-      <a class="btn" href="/book-online">Book Here</a>
-    </div>
-  </section>
-
-  <section class="pkg pkg--reverse" aria-labelledby="pkg-transformation">
-    <div class="pkg__body">
-      <h2 class="pkg__title" id="pkg-transformation"><a href="/book-online">Transformation Package</a></h2>
-      <div class="pkg__text rich">
-        <p>Ideal for: Clients seeking more comprehensive support to address specific health goals or challenges.</p>
-        <p></p>
-        <ul>
-          <li>Initial Consultation: 90 minutes</li>
-          <li>Follow-Up Sessions: 4 x 45 minutes</li>
-          <li>Duration: Approximately 5</li>
-          <li>Support: Email and messaging support during clinic hours</li>
-          <li>Cost: £500</li>
-        </ul>
-        <p></p>
-        <p>
-          This package offers more in-depth support, allowing for personalised strategies and adjustments over a longer
-          period to achieve meaningful health changes.
-        </p>
-      </div>
-      <a class="btn" href="/book-online">Book Here</a>
-    </div>
-    <div class="pkg__media">
-      <Image
-        src={garden}
-        alt="Amelia standing in front of a red Japanese maple"
-        widths={[480, 720, 960, 1440]}
-        sizes="(min-width: 768px) 50vw, 100vw"
-      />
-    </div>
-  </section>
+  <BookingCta tone="sage" image={clementines} imageAlt="Clementines piled up at a market stall" />
 </BaseLayout>
 
 <style>
-  /* ---------- Intro ---------- */
-  .intro {
-    padding: 23px var(--gutter) 38px;
-    text-align: center;
-  }
-
-  .intro__title {
-    font-size: clamp(34px, 20px + 2.6vw, 56px);
-    line-height: 1.18;
-  }
-
-  .intro__text {
-    max-width: 605px;
-    margin: 14px auto 0;
-    font-size: 20px;
-    line-height: 1.2;
-  }
-
-  /* ---------- Packages ---------- */
-  /* 1px olive frame lines between and around the columns, as on the original. */
-  .pkg {
+  .packages {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    padding: 1px;
-    background: var(--olive);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 40px);
   }
 
-  .pkg__media {
-    position: relative;
-    min-height: 300px;
+  .package {
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
+    border-radius: var(--radius-lg);
     background: var(--sage);
   }
 
-  .pkg__media :global(img) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .package__media {
+    aspect-ratio: 16 / 11;
   }
 
-  .pkg__body {
+  .package__body {
     display: flex;
+    flex: 1;
     flex-direction: column;
-    align-items: center;
-    padding: 88px 24px 126px;
-    background: var(--cream);
+    padding: clamp(28px, 4vw, 48px);
   }
 
-  .pkg--reverse .pkg__body {
-    padding-top: 70px;
-    padding-bottom: 68px;
+  .package__price {
+    margin-top: 14px;
+    font-family: var(--font-serif);
+    font-size: clamp(44px, 34px + 2vw, 64px);
+    line-height: 1;
   }
 
-  .pkg__title {
-    max-width: 404px;
-    font-size: clamp(30px, 23px + 1.1vw, 38px);
-    line-height: 1.2;
-    text-align: center;
+  .package__intro {
+    margin-top: 20px;
+    font-size: var(--text-lead);
+    line-height: 1.45;
   }
 
-  .pkg__title a {
-    text-decoration: none;
-  }
-
-  .pkg:not(.pkg--reverse) .pkg__title {
-    max-width: 350px;
-  }
-
-  .pkg__text {
-    width: min(100%, 365px);
+  .package__features {
     margin-top: 24px;
-    font-size: 20px;
-    line-height: 1.2;
+    padding-top: 24px;
+    border-top: 1px solid var(--hairline);
   }
 
-  .pkg--reverse .pkg__text {
-    margin-top: 50px;
+  .package__outro {
+    margin-top: 24px;
   }
 
-  .pkg__text ul {
-    padding-left: 32px;
+  .package__actions {
+    margin-top: auto;
+    padding-top: 32px;
   }
 
-  .pkg__text li {
-    padding-left: 4px;
+  /* Diet & Lifestyle Analysis teaser */
+  .mini {
+    margin-top: clamp(20px, 3vw, 40px);
   }
 
-  .pkg .btn {
-    margin-top: 40px;
+  .mini__card {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(20px, 3vw, 40px);
+    padding: 16px clamp(16px, 3vw, 40px) 16px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
   }
 
-  .pkg--reverse .btn {
-    margin-top: 64px;
+  .mini__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius);
   }
 
-  /* ---------- Mobile: image on top of each package ---------- */
-  @media (max-width: 767.98px) {
-    .intro {
-      padding: calc(40 * var(--m)) calc(38 * var(--m)) calc(62 * var(--m));
+  .mini__text .eyebrow {
+    margin-bottom: 10px;
+  }
+
+  .mini__text p:last-child {
+    margin-top: 8px;
+  }
+
+  @media (max-width: 899.98px) {
+    .packages {
+      grid-template-columns: minmax(0, 1fr);
     }
 
-    .intro__title {
-      font-size: calc(30 * var(--m));
+    .mini__card {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 16px 16px 24px;
     }
 
-    .intro__text {
-      margin-top: calc(20 * var(--m));
-      font-size: calc(18 * var(--m));
-    }
-
-    .pkg {
-      grid-template-columns: 1fr;
-      padding: 0;
-      padding-top: 1px;
-    }
-
-    .pkg__media {
-      order: -1;
-      min-height: 0;
-      aspect-ratio: 320 / 240;
-    }
-
-    .pkg__body,
-    .pkg--reverse .pkg__body {
-      padding: calc(41 * var(--m)) calc(24 * var(--m)) calc(20 * var(--m));
-    }
-
-    .pkg__title,
-    .pkg:not(.pkg--reverse) .pkg__title {
-      max-width: calc(220 * var(--m));
-      font-size: calc(22 * var(--m));
-    }
-
-    .pkg__text,
-    .pkg--reverse .pkg__text {
-      width: 100%;
-      margin-top: calc(21 * var(--m));
-      font-size: calc(20 * var(--m));
-    }
-
-    .pkg .btn,
-    .pkg--reverse .btn {
-      margin-top: calc(20 * var(--m));
+    .mini__cta {
+      justify-self: start;
     }
   }
 </style>

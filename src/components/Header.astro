@@ -1,5 +1,6 @@
 ---
 import LeafMark from './LeafMark.astro';
+import Arrow from './Arrow.astro';
 import { nav, site } from '../data/site';
 import { cleanPath } from '../utils/paths';
 
@@ -11,6 +12,7 @@ interface Props {
 const { overlay = false } = Astro.props;
 const current = cleanPath(Astro.url.pathname);
 const isCurrent = (href: string) => (href === '/' ? current === '/' : current === href || current.startsWith(`${href}/`));
+const bookHref = '/service-page/free-phone-consultation-1';
 ---
 
 <header class:list={['site-header', { 'site-header--overlay': overlay }]}>
@@ -34,20 +36,29 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
       </ul>
     </nav>
 
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
-      <span class="visually-hidden">Open site navigation</span>
-      <span class="menu-toggle__lines" aria-hidden="true"><span></span><span></span><span></span></span>
-    </button>
+    <div class="site-header__actions">
+      <a class="btn btn--sm site-header__cta" href={bookHref}>Book a Free Call</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="visually-hidden">Open site navigation</span>
+        <span class="menu-toggle__lines" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
   </div>
 
   <div class="mobile-menu" id="mobile-menu" hidden>
-    <button class="mobile-menu__close" type="button">
-      <span class="visually-hidden">Close site navigation</span>
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-        <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5" fill="none"></path>
-      </svg>
-    </button>
-    <nav aria-label="Site (mobile)">
+    <div class="mobile-menu__bar">
+      <a class="brand" href="/">
+        <LeafMark class="brand__mark" />
+        <span class="brand__name">{site.name}</span>
+      </a>
+      <button class="mobile-menu__close" type="button">
+        <span class="visually-hidden">Close site navigation</span>
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+          <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+        </svg>
+      </button>
+    </div>
+    <nav class="mobile-menu__nav" aria-label="Site (mobile)">
       <ul>
         {
           nav.map((item) => (
@@ -60,6 +71,13 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
         }
       </ul>
     </nav>
+    <div class="mobile-menu__footer">
+      <a class="btn btn--block" href={bookHref}>Book a Free Call <Arrow /></a>
+      <p class="mobile-menu__contact">
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <a href={site.instagram.url} target="_blank" rel="noopener">Instagram {site.instagram.handle}</a>
+      </p>
+    </div>
   </div>
 
   <noscript>
@@ -67,10 +85,13 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
       .menu-toggle {
         display: none !important;
       }
-      @media (max-width: 1023.98px) {
-        .site-nav {
-          display: block !important;
-        }
+      .site-nav {
+        display: block !important;
+      }
+      .site-header__inner {
+        flex-wrap: wrap;
+        height: auto !important;
+        padding-block: 14px !important;
       }
     </style>
   </noscript>
@@ -86,7 +107,7 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
       menu.hidden = false;
       toggle.setAttribute('aria-expanded', 'true');
       document.documentElement.classList.add('menu-open');
-      menu.querySelector<HTMLAnchorElement>('a')?.focus();
+      menu.querySelector<HTMLAnchorElement>('.mobile-menu__nav a')?.focus();
     };
     const close = (restoreFocus = true) => {
       menu.hidden = true;
@@ -103,8 +124,8 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !menu.hidden) close();
     });
-    // If the window grows to desktop size while the menu is open, close it.
-    window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+    // If the window grows to full-navigation size while the menu is open, close it.
+    window.matchMedia('(min-width: 1240px)').addEventListener('change', (e) => {
       if (e.matches && !menu.hidden) close(false);
     });
   }
@@ -115,45 +136,51 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
     position: relative;
     z-index: 20;
     background: var(--cream);
+    border-bottom: 1px solid var(--hairline);
   }
 
   .site-header__inner {
-    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 24px;
+    gap: 32px;
     height: var(--header-h);
-    padding: 0 60px 0 51px;
+    padding-inline: clamp(20px, 3vw, 40px);
   }
 
+  /* ---------- Brand ---------- */
   .brand {
     display: inline-flex;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
     color: var(--olive);
     text-decoration: none;
-    flex-shrink: 0;
   }
 
-  .brand__mark {
-    width: 23px;
-    height: 22px;
+  .brand :global(.brand__mark) {
+    width: 24px;
+    height: 23px;
     flex-shrink: 0;
   }
 
   .brand__name {
+    padding-top: 3px;
     font-family: var(--font-serif);
-    font-size: 20px;
-    line-height: 1.4;
-    padding-top: 4px;
+    font-size: 21px;
+    line-height: 1.2;
     white-space: nowrap;
+  }
+
+  /* ---------- Desktop navigation ---------- */
+  .site-nav {
+    display: none;
+    margin-left: auto;
   }
 
   .site-nav ul {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    align-items: center;
+    gap: clamp(16px, 1.6vw, 26px);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -161,100 +188,170 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
 
   .site-nav a {
     display: block;
-    padding: 4px clamp(8px, 1.05vw, 15px);
-    font-size: 16px;
-    line-height: 1.4;
-    color: var(--olive);
+    padding: 8px 0;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.3;
+    color: inherit;
     text-decoration: none;
     white-space: nowrap;
-    transition: color 0.4s ease;
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 7px;
+    transition:
+      text-decoration-color 0.3s ease,
+      color 0.3s ease;
   }
 
   .site-nav a:hover,
   .site-nav a[aria-current='page'] {
-    color: var(--olive-soft);
+    text-decoration-color: currentColor;
   }
 
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+  }
+
+  .site-header__cta {
+    box-shadow: none;
+  }
+
+  /* ---------- Hamburger ---------- */
   .menu-toggle {
-    display: none;
-    position: absolute;
-    top: 4px;
-    right: 6px;
-    width: 50px;
-    height: 50px;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    margin-right: -8px;
     padding: 0;
-    background: var(--cream);
     border: 0;
-    color: var(--olive);
+    background: transparent;
+    color: inherit;
     cursor: pointer;
   }
 
   .menu-toggle__lines {
     display: grid;
-    gap: 7px;
+    gap: 6px;
     width: 24px;
-    margin: 0 auto;
   }
 
   .menu-toggle__lines span {
     display: block;
     height: 1.5px;
+    border-radius: 1px;
     background: currentColor;
   }
 
+  @media (min-width: 1240px) {
+    .site-nav {
+      display: block;
+    }
+
+    .site-header__actions {
+      margin-left: 8px;
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+  }
+
+  /* Phones: just the brand and the menu button; the call to action is in the menu. */
+  @media (max-width: 599.98px) {
+    .site-header__cta {
+      display: none;
+    }
+
+    .brand__name {
+      font-size: 19px;
+    }
+  }
+
+  /* ---------- Mobile menu ---------- */
   .mobile-menu {
     position: fixed;
     inset: 0;
     z-index: 100;
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
     background: var(--cream);
-    padding: 58px 20px 40px;
+    color: var(--olive);
   }
 
   .mobile-menu[hidden] {
     display: none;
   }
 
-  .mobile-menu ul {
+  .mobile-menu__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--header-h);
+    padding-inline: clamp(20px, 3vw, 40px);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .mobile-menu__close {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    margin-right: -8px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--olive);
+    cursor: pointer;
+  }
+
+  .mobile-menu__nav {
+    padding: clamp(24px, 6vh, 56px) clamp(20px, 6vw, 56px) 24px;
+  }
+
+  .mobile-menu__nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    text-align: center;
   }
 
-  .mobile-menu li + li {
-    margin-top: 10px;
-  }
-
-  .mobile-menu a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 56px;
+  .mobile-menu__nav a {
+    display: block;
+    padding: 8px 0;
     font-family: var(--font-serif);
-    font-size: 22px;
-    line-height: 1.4;
+    font-size: clamp(30px, 6vw + 8px, 44px);
+    line-height: 1.15;
     color: var(--olive);
     text-decoration: none;
   }
 
-  .mobile-menu a[aria-current='page'] {
+  .mobile-menu__nav a[aria-current='page'] {
     color: var(--olive-soft);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 8px;
   }
 
-  .mobile-menu__close {
-    position: absolute;
-    top: 17px;
-    right: 19px;
-    width: 44px;
-    height: 44px;
+  .mobile-menu__footer {
     display: grid;
-    place-items: center;
-    padding: 0;
-    background: transparent;
-    border: 0;
-    color: var(--olive);
-    cursor: pointer;
+    gap: 22px;
+    margin-top: auto;
+    padding: 24px clamp(20px, 6vw, 56px) clamp(28px, 5vh, 48px);
+  }
+
+  .mobile-menu__contact {
+    display: grid;
+    gap: 6px;
+    font-size: var(--text-small);
+  }
+
+  .mobile-menu__contact a {
+    text-decoration: none;
   }
 
   :global(html.menu-open) {
@@ -268,12 +365,14 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
     right: 0;
     left: 0;
     background: transparent;
+    border-bottom-color: rgba(255, 253, 246, 0.18);
+    color: var(--cream);
   }
 
   .site-header--overlay .brand,
   .site-header--overlay .site-nav a {
     color: var(--cream);
-    text-shadow: 0 1px 14px rgba(20, 26, 10, 0.45);
+    text-shadow: 0 1px 14px rgba(var(--ink-rgb), 0.45);
   }
 
   .site-header--overlay .site-nav a:hover,
@@ -281,75 +380,7 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
     color: var(--lime);
   }
 
-  .site-header--overlay .menu-toggle {
-    background: transparent;
-    color: var(--cream);
-  }
-
   .site-header--overlay :focus-visible {
     outline-color: var(--lime);
-  }
-
-  @media (max-width: 1023.98px) {
-    .site-header--overlay .site-header__inner {
-      padding-top: calc(30 * var(--m));
-      padding-bottom: 0;
-    }
-  }
-
-  /* Tablet + mobile: centred stacked logo, hamburger menu (as on the Wix mobile site). */
-  @media (max-width: 1023.98px) {
-    .site-header__inner {
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 0;
-      height: auto;
-      padding: calc(70 * var(--m)) 64px calc(62 * var(--m));
-    }
-
-    .brand {
-      flex-direction: column;
-      gap: calc(22 * var(--m));
-    }
-
-    .brand__mark {
-      width: calc(21 * var(--m));
-      height: calc(20 * var(--m));
-    }
-
-    .brand__name {
-      font-size: calc(19 * var(--m));
-      padding-top: 0;
-      white-space: normal;
-      text-align: center;
-    }
-
-    .site-nav {
-      display: none;
-      margin-top: 16px;
-    }
-
-    .site-nav ul {
-      justify-content: center;
-    }
-
-    .menu-toggle {
-      display: block;
-      top: calc(2 * var(--m));
-      right: calc(6 * var(--m));
-      width: calc(50 * var(--m));
-      height: calc(50 * var(--m));
-    }
-
-    .menu-toggle__lines {
-      width: calc(23 * var(--m));
-      gap: calc(7 * var(--m));
-    }
-  }
-
-  @media (min-width: 1024px) and (max-width: 1180px) {
-    .site-header__inner {
-      padding-inline: 32px 36px;
-    }
   }
 </style>

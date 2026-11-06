@@ -1,0 +1,106 @@
+---
+/**
+ * "Free phone consultation" block, used near the end of most pages:
+ * a pastel colour band with a rounded photo, the original consultation
+ * copy and the main call to action.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import Arrow from './Arrow.astro';
+import defaultImage from '../assets/images/amelia-greengrocer.jpg';
+
+interface Props {
+  tone?: 'sage' | 'lime' | 'mist' | 'cream';
+  image?: ImageMetadata;
+  imageAlt?: string;
+  /** CSS object-position for the image crop. */
+  imagePosition?: string;
+  /** Put the photo on the right instead of the left (desktop). */
+  reverse?: boolean;
+}
+
+const {
+  tone = 'sage',
+  image = defaultImage,
+  imageAlt = 'Amelia choosing fresh produce at a greengrocer',
+  imagePosition = '50% 40%',
+  reverse = false,
+} = Astro.props;
+---
+
+<section class:list={['booking', 'section', `section--${tone}`, { 'booking--reverse': reverse }]} aria-labelledby="booking-title">
+  <div class="container booking__inner">
+    <div class="booking__media rounded">
+      <Image
+        src={image}
+        alt={imageAlt}
+        widths={[480, 720, 960, 1280]}
+        sizes="(min-width: 900px) 45vw, 100vw"
+        class="media-cover"
+        style={`object-position: ${imagePosition}`}
+      />
+    </div>
+    <div class="booking__text">
+      <p class="eyebrow">Free 20 minute call</p>
+      <h2 class="h2" id="booking-title">Free phone consultation</h2>
+      <p class="lead booking__lead">
+        Book in a free 20 minute consultation over the phone to chat about your symptoms.
+      </p>
+      <p class="booking__body">
+        In this phone call we can also explore the options for working together and I can explain how my approach can
+        be applied to your unique situation, offering some potential routes to begin improvements. I work mostly through
+        zoom so where you're based doesn’t matter, as long as you have access to Wi-Fi.
+      </p>
+      <div class="btn-row booking__actions">
+        <a class="btn" href="/service-page/free-phone-consultation-1">Book a Free Call <Arrow /></a>
+        <a class="btn btn--outline" href="/book-online">View all services</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .booking__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(40px, 6vw, 96px);
+  }
+
+  .booking--reverse .booking__media {
+    order: 2;
+  }
+
+  .booking__media {
+    aspect-ratio: 4 / 5;
+    max-height: 720px;
+    width: 100%;
+  }
+
+  .booking__lead {
+    margin-top: clamp(20px, 2.5vw, 28px);
+  }
+
+  .booking__body {
+    max-width: 58ch;
+    margin-top: 16px;
+  }
+
+  .booking__actions {
+    margin-top: clamp(28px, 3.5vw, 40px);
+  }
+
+  @media (max-width: 899.98px) {
+    .booking__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .booking--reverse .booking__media {
+      order: 0;
+    }
+
+    .booking__media {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

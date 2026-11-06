@@ -1,9 +1,10 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import InstagramFeed from '../components/InstagramFeed.astro';
-import ConsultSplit from '../components/ConsultSplit.astro';
 import HomeHero from '../components/HomeHero.astro';
+import BookingCta from '../components/BookingCta.astro';
+import InstagramFeed from '../components/InstagramFeed.astro';
+import Arrow from '../components/Arrow.astro';
 import { site } from '../data/site';
 import readingMenu from '../assets/images/amelia-reading-menu.jpg';
 import greengrocer from '../assets/images/amelia-greengrocer.jpg';
@@ -28,6 +29,17 @@ const jsonLd = [
   },
   { '@context': 'https://schema.org/', '@type': 'WebSite', name: site.titleSuffix, url: site.url },
 ];
+
+const stories = [
+  {
+    name: 'Leah',
+    text: 'Working with Amelia for my nutritional therapy consultation has been a truly transformative experience. She combines deep expertise with a compassionate, personalised approach that makes you feel truly cared for. Amelia takes the time to understand your unique needs and goals, and her recommendations are both practical and life-changing. Thanks to her guidance, I now feel more energized, balanced, and empowered to make healthier choices every day.',
+  },
+  {
+    name: 'Esme',
+    text: "From the very first session, Amelia's warmth, knowledge, and genuine care for my well-being put me at ease. She took the time to truly listen to my concerns, tailoring her approach to my unique health needs. Her guidance not only helped me understand how to nourish my body better but also inspired me to make sustainable, long-term changes.",
+  },
+];
 ---
 
 <BaseLayout
@@ -38,70 +50,59 @@ const jsonLd = [
 >
   <HomeHero />
 
-  <div class="flow">
-    <section class="mission" id="mission" aria-labelledby="mission-title">
-      <div class="mission__media">
+  <section class="section section--cream mission" id="mission" aria-labelledby="mission-title">
+    <div class="container mission__inner">
+      <div class="mission__media rounded">
         <Image
           src={readingMenu}
           alt="Amelia reading a menu at a restaurant table"
-          widths={[480, 720, 960, 1440]}
-          sizes="(min-width: 768px) 50vw, 100vw"
-          loading="eager"
+          widths={[480, 720, 960, 1280]}
+          sizes="(min-width: 900px) 42vw, 100vw"
+          class="media-cover"
+          style="object-position: 50% 12%"
         />
       </div>
-      <div class="mission__body">
-        <h2 class="mission__title" id="mission-title">My Mission</h2>
-        <p class="mission__text">
-          My mission is to empower women to make informed health choices when it comes to their nutrition. I aim to
-          break down the barriers to understanding and implementing diet and lifestyle changes, making it accessible
-          and achievable for everyone. With science-backed strategies and a compassionate approach, I offer practical
-          advice and support to make healthy eating an effortless part of your lifestyle. Whether you’re looking to
-          increase energy, balance your hormones, improve gut health, or boost your mental clarity, I'm here to guide
-          you every step of the way. You can heal naturally, starting with what's on your plate.
+      <div class="mission__text">
+        <p class="eyebrow">My mission</p>
+        <h2 class="h2" id="mission-title">Empowering women to make informed health choices</h2>
+        <p class="lead mission__lead">
+          My mission is to empower women to make informed health choices when it comes to their nutrition.
         </p>
-        <a class="btn btn--sm" href="/about-5">Discover More</a>
+        <p class="mission__body">
+          I aim to break down the barriers to understanding and implementing diet and lifestyle changes, making it
+          accessible and achievable for everyone. With science-backed strategies and a compassionate approach, I offer
+          practical advice and support to make healthy eating an effortless part of your lifestyle. Whether you’re
+          looking to increase energy, balance your hormones, improve gut health, or boost your mental clarity, I'm here
+          to guide you every step of the way. You can heal naturally, starting with what's on your plate.
+        </p>
+        <a class="btn btn--outline mission__cta" href="/about-5">Discover More <Arrow /></a>
       </div>
-    </section>
-
-    <div class="photo-band">
-      <Image
-        src={greengrocer}
-        alt="Amelia choosing fresh produce at a greengrocer"
-        widths={[480, 800, 1200, 1600, 2000, 2560]}
-        sizes="100vw"
-      />
     </div>
+  </section>
 
-    <ConsultSplit size="lg" class="flow__consult" />
-  </div>
+  <BookingCta tone="sage" image={greengrocer} reverse />
 
-  <section class="stories" aria-labelledby="stories-title">
-    <h2 class="stories__title" id="stories-title">Client Stories</h2>
-    <p class="stories__quote">''I'd highly recommend Amelia's service''</p>
-    <div class="stories__list">
-      <figure class="story">
-        <figcaption class="story__name">Leah</figcaption>
-        <blockquote class="story__text story__text--justify">
-          <p>
-            Working with Amelia for my nutritional therapy consultation has been a truly transformative experience. She
-            combines deep expertise with a compassionate, personalised approach that makes you feel truly cared for.
-            Amelia takes the time to understand your unique needs and goals, and her recommendations are both practical
-            and life-changing. Thanks to her guidance, I now feel more energized, balanced, and empowered to make
-            healthier choices every day.
-          </p>
-        </blockquote>
-      </figure>
-      <figure class="story">
-        <figcaption class="story__name">Esme</figcaption>
-        <blockquote class="story__text">
-          <p>
-            From the very first session, Amelia's warmth, knowledge, and genuine care for my well-being put me at ease.
-            She took the time to truly listen to my concerns, tailoring her approach to my unique health needs. Her
-            guidance not only helped me understand how to nourish my body better but also inspired me to make
-            sustainable, long-term changes.
-          </p>
-        </blockquote>
-      </figure>
+  <section class="section section--lime stories" aria-labelledby="stories-title">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow stories__eyebrow">Client stories</p>
+        <h2 class="h2" id="stories-title">“I’d highly recommend Amelia’s service”</h2>
+      </div>
+      <div class="stories__grid">
+        {
+          stories.map((story) => (
+            <figure class="story">
+              <span class="story__mark" aria-hidden="true">
+                “
+              </span>
+              <blockquote class="story__text">
+                <p>{story.text}</p>
+              </blockquote>
+              <figcaption class="story__name">{story.name}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
     </div>
   </section>
 
@@ -109,216 +110,95 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
-  /* ---------- Flow wrapper (re-orders sections on mobile, like the Wix mobile site) ---------- */
-  .flow {
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ---------- My Mission ---------- */
-  .mission {
+  /* ---------- Mission ---------- */
+  .mission__inner {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: clamp(620px, 56vw, 807px);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(40px, 7vw, 112px);
   }
 
   .mission__media {
-    position: relative;
-    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    max-height: 760px;
   }
 
-  .mission__media :global(img) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 0%;
+  .mission__lead {
+    margin-top: clamp(20px, 2.5vw, 28px);
   }
 
   .mission__body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 120px clamp(24px, 3.4vw, 49px) 72px;
-    text-align: center;
+    max-width: 60ch;
+    margin-top: 16px;
   }
 
-  .mission__title {
-    font-size: clamp(36px, 19px + 2.6vw, 56px);
-    line-height: 1.35;
-  }
-
-  .mission__text {
-    max-width: 622px;
-    margin-top: 22px;
-    font-size: clamp(17px, 15.5px + 0.33vw, 20px);
-    line-height: 1.88;
-  }
-
-  .mission .btn {
-    margin-top: 62px;
-  }
-
-  /* ---------- Full-width photo ---------- */
-  .photo-band {
-    height: min(879px, 61vw);
-    overflow: hidden;
-  }
-
-  .photo-band :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .mission__cta {
+    margin-top: clamp(28px, 3.5vw, 40px);
   }
 
   /* ---------- Client stories ---------- */
-  .stories {
-    background: var(--sage);
-    padding: 134px 0 8px;
-    text-align: center;
+  .stories__eyebrow {
+    color: var(--olive);
   }
 
-  .stories__title {
-    padding-inline: var(--gutter);
-    font-size: clamp(38px, 22px + 2.55vw, 56px);
-    line-height: 1.4;
-  }
-
-  .stories__quote {
-    margin-top: 33px;
-    padding-inline: var(--gutter);
-    font-size: clamp(30px, 26.5px + 0.9vw, 38px);
-    line-height: 1.4;
-  }
-
-  .stories__list {
-    margin: 98px var(--gutter) 0;
-    border-bottom: 1px solid var(--olive);
-    text-align: left;
+  .stories__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 40px);
   }
 
   .story {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
-    gap: 24px 40px;
+    display: flex;
+    flex-direction: column;
     margin: 0;
-    padding: 6px 0 12px;
-    border-top: 1px solid var(--olive);
+    padding: clamp(28px, 4vw, 56px);
+    border-radius: var(--radius-lg);
+    background: var(--cream);
   }
 
-  .story + .story {
-    padding-top: 6px;
-  }
-
-  .story__name {
+  .story__mark {
+    display: block;
+    height: 0.62em;
     font-family: var(--font-serif);
-    font-size: 24px;
-    line-height: 1.4;
+    font-size: clamp(72px, 7vw, 104px);
+    line-height: 1;
+    color: var(--olive-soft);
   }
 
   .story__text {
-    margin: 0;
-    font-size: 20px;
-    line-height: 1.4;
+    margin-top: 20px;
+    font-size: var(--text-lead);
+    line-height: 1.5;
   }
 
-  .story__text--justify {
-    text-align: justify;
+  .story__name {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: auto;
+    padding-top: 28px;
+    font-family: var(--font-serif);
+    font-size: var(--text-h4);
   }
 
-  .story:last-child {
-    padding-bottom: 54px;
+  .story__name::before {
+    content: '';
+    width: 36px;
+    height: 1px;
+    background: currentColor;
   }
 
-  /* ---------- Tablet ---------- */
-  @media (max-width: 1023.98px) {
-    .stories {
-      padding-top: 96px;
-    }
-
-    .story {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
-    }
-  }
-
-  /* ---------- Mobile: single column, Wix mobile ordering and sizes ---------- */
-  @media (max-width: 767.98px) {
-    .mission {
-      grid-template-columns: 1fr;
-      min-height: 0;
+  @media (max-width: 899.98px) {
+    .mission__inner {
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .mission__media {
-      aspect-ratio: 320 / 260;
+      aspect-ratio: 4 / 3;
     }
 
-    .mission__body {
-      padding: calc(21 * var(--m)) calc(20 * var(--m)) calc(30 * var(--m));
-    }
-
-    .mission__title {
-      font-size: calc(33 * var(--m));
-    }
-
-    .mission__text {
-      margin-top: calc(16 * var(--m));
-      font-size: calc(17 * var(--m));
-    }
-
-    .mission .btn {
-      margin-top: calc(26 * var(--m));
-    }
-
-    .flow :global(.flow__consult) {
-      order: 1;
-    }
-
-    .photo-band {
-      order: 2;
-      height: auto;
-      aspect-ratio: 320 / 367;
-    }
-
-    .stories {
-      padding-top: calc(4 * var(--m));
-    }
-
-    .stories__title {
-      font-size: calc(36 * var(--m));
-    }
-
-    .stories__quote {
-      margin-top: calc(50 * var(--m));
-      font-size: calc(30 * var(--m));
-    }
-
-    .stories__list {
-      margin: calc(40 * var(--m)) calc(10 * var(--m)) 0;
-    }
-
-    .story {
-      grid-template-columns: 1fr;
-      gap: calc(14 * var(--m));
-      padding: calc(10 * var(--m)) 0 calc(80 * var(--m));
-    }
-
-    .story + .story {
-      padding-top: calc(10 * var(--m));
-    }
-
-    .story__name {
-      font-size: calc(24 * var(--m));
-    }
-
-    .story__text {
-      padding-inline: calc(10 * var(--m));
-      font-size: calc(20 * var(--m));
-    }
-
-    .story:last-child {
-      padding-bottom: calc(60 * var(--m));
+    .stories__grid {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

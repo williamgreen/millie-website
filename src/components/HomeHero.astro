@@ -11,6 +11,7 @@
  */
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
+import Arrow from './Arrow.astro';
 
 type ImageModule = { default: ImageMetadata };
 const wideFiles = import.meta.glob<ImageModule>('../assets/images/hero/frame-*.jpg', { eager: true });
@@ -71,13 +72,10 @@ const keyframes =
     <h1 class="hero__title" id="hero-title">Nutrition for women</h1>
     <p class="hero__lead">Heal yourself naturally, starting with what’s on your plate.</p>
     <div class="hero__actions">
-      <a class="hero__cta" href="/service-page/free-phone-consultation-1">
-        Book a Free Call
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-          <path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
+      <a class="btn btn--lg hero__cta" href="/service-page/free-phone-consultation-1">
+        Book a Free Call <Arrow size={22} />
       </a>
-      <a class="hero__secondary" href="/about-5">Discover More</a>
+      <a class="btn btn--lg btn--light hero__secondary" href="/about-5">Discover More</a>
     </div>
     <p class="hero__note">Free 20 minute phone consultation · Online or 1:1 in Bristol</p>
   </div>
@@ -202,59 +200,21 @@ const keyframes =
     margin-top: 38px;
   }
 
-  /* Primary call to action: large lime button. */
-  .hero__cta,
-  .hero__secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60px;
-    border-radius: 18px;
-    font-family: var(--font-button);
-    text-decoration: none;
+  /* Buttons use the shared .btn styles; on the photo they get a deeper shadow. */
+  .hero__actions :global(.btn) {
     text-shadow: none;
   }
 
   .hero__cta {
-    gap: 12px;
-    padding: 0 26px 0 32px;
-    background: var(--lime);
-    color: var(--olive);
-    font-size: 20px;
     box-shadow: 0 14px 34px rgba(10, 14, 5, 0.38);
-    transition:
-      transform 0.3s ease,
-      box-shadow 0.3s ease,
-      background-color 0.3s ease;
-  }
-
-  .hero__cta svg {
-    transition: transform 0.3s ease;
   }
 
   .hero__cta:hover {
-    background: #f0ffa8;
-    transform: translateY(-2px);
     box-shadow: 0 18px 42px rgba(10, 14, 5, 0.48);
   }
 
-  .hero__cta:hover svg {
-    transform: translateX(4px);
-  }
-
   .hero__secondary {
-    padding: 0 28px;
-    border: 1px solid rgba(255, 253, 246, 0.75);
-    color: var(--cream);
     font-size: 18px;
-    transition:
-      background-color 0.3s ease,
-      border-color 0.3s ease;
-  }
-
-  .hero__secondary:hover {
-    background: rgba(255, 253, 246, 0.14);
-    border-color: var(--cream);
   }
 
   .hero__cta:focus-visible,
