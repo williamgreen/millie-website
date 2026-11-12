@@ -42,6 +42,5 @@ export const nav: NavItem[] = [
   { label: 'Diet & Lifestyle Analysis', href: '/about-6' },
   { label: '1:1 Serives', href: '/general-1' },
   { label: 'How I Work', href: '/team-3' },
-  { label: 'Book Online', href: '/book-online' },
   { label: 'Projects', href: '/projects-8' },
 ];

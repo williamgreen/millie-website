@@ -17,6 +17,9 @@ interface Props {
   imagePosition?: string;
   /** Put the photo on the right instead of the left (desktop). */
   reverse?: boolean;
+  /** The outline button next to "Book a Free Call". */
+  secondaryLabel?: string;
+  secondaryHref?: string;
 }
 
 const {
@@ -25,6 +28,8 @@ const {
   imageAlt = 'Amelia choosing fresh produce at a greengrocer',
   imagePosition = '50% 40%',
   reverse = false,
+  secondaryLabel = 'See packages',
+  secondaryHref = '/general-1',
 } = Astro.props;
 ---
 
@@ -53,7 +58,7 @@ const {
       </p>
       <div class="btn-row booking__actions">
         <a class="btn" href="/service-page/free-phone-consultation-1">Book a Free Call <Arrow /></a>
-        <a class="btn btn--outline" href="/book-online">View all services</a>
+        <a class="btn btn--outline" href={secondaryHref}>{secondaryLabel}</a>
       </div>
     </div>
   </div>

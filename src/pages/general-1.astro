@@ -26,7 +26,6 @@ const packages = [
     image: supperClub,
     imageAlt: 'Guests seated along a long table at a candlelit supper club',
     imagePosition: '50% 55%',
-    href: '/service-page/3-month-foundation-package',
   },
   {
     id: 'transformation',
@@ -44,7 +43,6 @@ const packages = [
     image: garden,
     imageAlt: 'Amelia standing in front of a red Japanese maple',
     imagePosition: '50% 30%',
-    href: '/service-page/transformation-package',
   },
 ];
 ---
@@ -86,11 +84,6 @@ const packages = [
                 ))}
               </ul>
               <p class="package__outro">{pkg.outro}</p>
-              <div class="btn-row package__actions">
-                <a class="btn" href={pkg.href}>
-                  Book Here<span class="visually-hidden">: {pkg.name}</span> <Arrow />
-                </a>
-              </div>
             </div>
           </article>
         ))
@@ -118,7 +111,13 @@ const packages = [
     </div>
   </section>
 
-  <BookingCta tone="sage" image={freeCall} imageAlt="Heirloom tomatoes in a market crate" />
+  <BookingCta
+    tone="sage"
+    image={freeCall}
+    imageAlt="Heirloom tomatoes in a market crate"
+    secondaryLabel="How I work"
+    secondaryHref="/team-3"
+  />
 </BaseLayout>
 
 <style>
@@ -170,11 +169,6 @@ const packages = [
 
   .package__outro {
     margin-top: 24px;
-  }
-
-  .package__actions {
-    margin-top: auto;
-    padding-top: 32px;
   }
 
   /* Diet & Lifestyle Analysis teaser */

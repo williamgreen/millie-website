@@ -5,7 +5,7 @@ rebuilt from the original Wix site as a fast, fully responsive static site with 
 
 Every page, image and piece of copy from the live site has been carried over into a refreshed, more modern
 design (same pastel colours); the few presentation changes are listed under "Differences from the Wix site".
-The URLs are identical (`/about-5`, `/book-online`, `/service-page/...`), so existing links and search results
+The URLs are identical (`/about-5`, `/general-1`, `/service-page/...`), so existing links and search results
 keep working.
 
 ## Getting started
@@ -28,7 +28,7 @@ public/
 src/
   assets/images/          Every image from the Wix site (web-sized originals, metadata stripped). A few are
                           no longer used by the new design but are kept: plums-tile.jpg, vegetable-tray.png,
-                          icon-*.png and social-*.png
+                          service-3-month-foundation.jpg, service-transformation.jpg, icon-*.png and social-*.png
   assets/images/hero/     Home page hero slides (see below)
   assets/instagram/       Drop Instagram post images here (see below)
   components/
@@ -39,7 +39,8 @@ src/
     Header.astro, Footer.astro, InstagramFeed.astro, EmailText.astro, Arrow.astro, LeafMark.astro
   data/
     site.ts               Name, email, phone, social links, navigation, MailerLite account
-    services.ts           The four bookable services (Book Online + /service-page/* pages)
+    services.ts           The services with a booking button: the free discovery call and the Diet & Lifestyle
+                          Analysis (/service-page/* pages)
     events.ts             Workshop event pages
     instagram.ts          Instagram feed settings
   layouts/BaseLayout.astro  <head>, SEO tags, header + footer
@@ -80,9 +81,10 @@ prefer reduced motion (or have JavaScript off) see a still photo, and there's a 
 
 ## Things to set up
 
-- **Booking.** "Book Now" on the Wix site opened Wix Bookings, which only exists on Wix. Each service's
-  `bookingUrl` in `src/data/services.ts` currently opens an email to Amelia. Swap it for a Calendly,
-  Cal.com or Practice Better link to take bookings online.
+- **Booking.** There is no online booking: the packages on 1:1 Services are described but can't be booked,
+  and every "Book a Free Call" button leads to the free discovery call. The "Book Now" buttons on the discovery
+  call and Diet & Lifestyle Analysis pages open an email to Amelia (`bookingUrl` in `src/data/services.ts`);
+  swap in a Calendly, Cal.com or Practice Better link there if she wants calls booked into a calendar.
 - **Instagram feed.** Wix pulled the "Follow me" feed live from Instagram (on the live site those images had
   expired and were showing as broken). Add post images to `src/assets/instagram/` (`01.jpg`, `02.jpg`, ...)
   and they appear as a slider on the home page. Without images the section shows a "View on Instagram" button.
@@ -112,8 +114,10 @@ Any static host works. Build command `npm run build`, output directory `dist`.
 - **Vercel**: `vercel.json` enables `cleanUrls` so `/about-5` serves `about-5.html`.
 - **Netlify / Cloudflare Pages / GitHub Pages**: work out of the box.
 
-Old Wix-only URLs (`/challenges`, `/single-project`, `/booking-calendar/*`) redirect to their closest page
-(see `redirects` in `astro.config.mjs`).
+Old Wix URLs without their own page redirect to the closest one (see `redirects` in `astro.config.mjs`):
+`/book-online` and the Wix booking calendar go to the free discovery call, the two package pages
+(`/service-page/3-month-foundation-package`, `/service-page/transformation-package`) go to 1:1 Services, and
+`/challenges` and `/single-project` go to Projects.
 
 ## Differences from the Wix site
 
@@ -125,9 +129,11 @@ refreshed, and things that were broken on the original fixed:
   deep olive footer. Some sections have short headings or summaries drawn from the existing text: the About page
   credentials, the price and session chips and "How it works" steps on Diet & Lifestyle Analysis, and the
   "At a glance" box on the service pages.
-- Booking buttons: "Book Here" on 1:1 Services and Diet & Lifestyle Analysis now goes straight to that
-  service's page instead of Book Online, and the free consultation block (Home, About and most other pages) has
-  "Book a Free Call" and "View all services" instead of "Book Here".
+- No online booking: "Book Online" is gone from the menus and its page redirects to the free discovery call.
+  The packages on 1:1 Services no longer have "Book Here" buttons (and their booking pages redirect there);
+  people book a free discovery call instead. "Book Here" on Diet & Lifestyle Analysis goes straight to its own
+  page, and the free consultation block (Home, About and most other pages) has "Book a Free Call" and
+  "See packages" instead of "Book Here".
 - The package prices on 1:1 Services are shown as large prices instead of a "Cost: £350" / "Cost: £500" line.
 - Service and event descriptions are laid out with headings and tick lists instead of plain text with "•" and
   "💚" bullets.
