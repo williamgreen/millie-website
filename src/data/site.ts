@@ -8,7 +8,7 @@ export const site = {
   titleSuffix: 'Amelia Peace Nutritional Therapy',
   url: 'https://www.ameliapeacenutrition.com',
   description:
-    '- Amelia Peace Nutrition -  heal yourself naturally, starting with what is on your plate',
+    'Amelia Peace is a registered Naturopathic Nutritional Therapist offering evidence-based, food-first support for women at every stage of life, online and 1:1 in Bristol.',
   email: 'ameliapeacenutrition@gmail.com',
   phone: '07867122963',
   instagram: {
