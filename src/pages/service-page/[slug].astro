@@ -116,16 +116,24 @@ const moreInfo = service.slug === 'diet-lifestyle-analysis' ? '/about-6' : undef
     background: var(--sage);
   }
 
+  /*
+   * The label column is as wide as the longest label (in whatever font the device
+   * uses), and every row shares it through subgrid, so the values line up and a
+   * label can never run into its value.
+   */
   .summary {
     display: grid;
-    gap: 14px;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 14px 20px;
     margin: 20px 0 28px;
   }
 
   .summary div {
     display: grid;
-    grid-template-columns: 96px minmax(0, 1fr);
-    gap: 12px;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+    row-gap: 2px;
     padding-bottom: 14px;
     border-bottom: 1px solid var(--hairline);
   }
